@@ -1,0 +1,38 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Next.js build output
+/.next/
+/out/
+
+# Production build cache
+.nft/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Env files (do not commit secrets!)
+.env
+.env*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Vercel cache
+.vercel
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Local temporary git files
+/git-temp/
+/git_download.log
+/test.txt
+/rustup-init.exe
