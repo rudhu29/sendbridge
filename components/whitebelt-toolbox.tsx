@@ -9,6 +9,9 @@ import { Terminal, Wallet, Shield, Layers } from "lucide-react";
 export default function WhiteBeltToolbox() {
   // Local sandbox wallet (Task 1 local fallback)
   const [localKeypair, setLocalKeypair] = useState<{ publicKey: string; secretKey: string } | null>(null);
+  const [localBalance, setLocalBalance] = useState<string | null>(null);
+  const [localLoading, setLocalLoading] = useState(false);
+  const [localFundingLoading, setLocalFundingLoading] = useState(false);
   const [logs, setLogs] = useState<string[]>(["White & Orange Belt DApp initialized. Ready."]);
 
   const addLog = (message: string) => {
@@ -23,10 +26,28 @@ export default function WhiteBeltToolbox() {
         publicKey: pair.publicKey(),
         secretKey: pair.secret(),
       });
+      setLocalBalance(null);
       addLog(`Generated local testing keypair: ${pair.publicKey()}`);
       toast.success("Sandbox Keypair Created", "A temporary keypair has been generated client-side.");
     } catch (err: any) {
       addLog(`Local wallet generation failed: ${err.message}`);
+    }
+  };
+
+  const fundLocalWallet = async () => {
+    if (!localKeypair) return;
+    setLocalFundingLoading(true);
+    addLog(`Invoking Friendbot funding for ${localKeypair.publicKey.slice(0, 10)}...`);
+    try {
+      const res = await fetch(`https://friendbot.stellar.org/?addr=${localKeypair.publicKey}`);
+      if (!res.ok) throw new Error("Friendbot API error.");
+      addLog("Friendbot funded local account with 10,000 XLM.");
+      toast.success("Sandbox Account Active", "10,000 Testnet XLM loaded.");
+    } catch (err: any) {
+      addLog(`Friendbot failed: ${err.message}`);
+      toast.error("Friendbot Throttled", "Network is congested. Try again shortly.");
+    } finally {
+      setLocalFundingLoading(false);
     }
   };
 
@@ -78,6 +99,22 @@ export default function WhiteBeltToolbox() {
                 <code className="text-[10px] text-slate-300 break-all select-all block p-2 bg-slate-950 rounded border border-slate-900 font-mono">
                   {localKeypair.publicKey}
                 </code>
+              </div>
+
+              <div className="space-y-1.5 border-t border-slate-900 pt-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] text-slate-500 font-bold uppercase">Balance</span>
+                  <span className="text-xs text-white font-extrabold">{localBalance !== null ? localBalance : "--"} XLM</span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 mt-2">
+                  <Button size="sm" variant="outline" disabled={localLoading}>
+                    Refresh Balance
+                  </Button>
+                  <Button size="sm" variant="glow" onClick={fundLocalWallet} disabled={localFundingLoading}>
+                    Friendbot Fund
+                  </Button>
+                </div>
               </div>
             </div>
           )}
