@@ -1,10 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { Keypair } from "@stellar/stellar-sdk";
+import { Keypair, Horizon } from "@stellar/stellar-sdk";
 import { Button } from "./ui/button";
 import { toast } from "./ui/toast";
 import { Terminal, Wallet, Shield, Layers } from "lucide-react";
+
+const TESTNET_HORIZON_URL = "https://horizon-testnet.stellar.org";
 
 export default function WhiteBeltToolbox() {
   // Local sandbox wallet (Task 1 local fallback)
@@ -43,11 +45,33 @@ export default function WhiteBeltToolbox() {
       if (!res.ok) throw new Error("Friendbot API error.");
       addLog("Friendbot funded local account with 10,000 XLM.");
       toast.success("Sandbox Account Active", "10,000 Testnet XLM loaded.");
+      await fetchLocalBalance();
     } catch (err: any) {
       addLog(`Friendbot failed: ${err.message}`);
       toast.error("Friendbot Throttled", "Network is congested. Try again shortly.");
     } finally {
       setLocalFundingLoading(false);
+    }
+  };
+
+  const fetchLocalBalance = async () => {
+    if (!localKeypair) return;
+    setLocalLoading(true);
+    try {
+      const server = new Horizon.Server(TESTNET_HORIZON_URL);
+      const accountInfo = await server.loadAccount(localKeypair.publicKey);
+      const nativeBalance = accountInfo.balances.find((b) => b.asset_type === "native");
+      setLocalBalance(nativeBalance ? nativeBalance.balance : "0.0000");
+      addLog(`Local sandbox balance: ${nativeBalance ? nativeBalance.balance : "0.0000"} XLM`);
+    } catch (err: any) {
+      if (err.response && err.response.status === 404) {
+        setLocalBalance("0.0000");
+        addLog("Local sandbox account is not yet funded on Testnet.");
+      } else {
+        addLog(`Failed to fetch local balance: ${err.message}`);
+      }
+    } finally {
+      setLocalLoading(false);
     }
   };
 
@@ -108,7 +132,7 @@ export default function WhiteBeltToolbox() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 mt-2">
-                  <Button size="sm" variant="outline" disabled={localLoading}>
+                  <Button size="sm" variant="outline" onClick={fetchLocalBalance} disabled={localLoading}>
                     Refresh Balance
                   </Button>
                   <Button size="sm" variant="glow" onClick={fundLocalWallet} disabled={localFundingLoading}>
