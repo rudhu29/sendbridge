@@ -1,23 +1,100 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Keypair, Horizon } from "@stellar/stellar-sdk";
+import { StellarWalletsKit, WalletNetwork, allowAllModules } from "@creit.tech/stellar-wallets-kit";
 import { Button } from "./ui/button";
 import { toast } from "./ui/toast";
-import { Terminal, Wallet, Shield, Layers } from "lucide-react";
+import { Terminal, Wallet, Shield, Layers, RefreshCw } from "lucide-react";
 
 const TESTNET_HORIZON_URL = "https://horizon-testnet.stellar.org";
 
 export default function WhiteBeltToolbox() {
+  // Wallet state
+  const [walletAddress, setWalletAddress] = useState<string>("");
+  const [walletBalance, setWalletBalance] = useState<string | null>(null);
+  const [walletType, setWalletType] = useState<string>("");
+  const [walletLoading, setWalletLoading] = useState(false);
+
   // Local sandbox wallet (Task 1 local fallback)
   const [localKeypair, setLocalKeypair] = useState<{ publicKey: string; secretKey: string } | null>(null);
   const [localBalance, setLocalBalance] = useState<string | null>(null);
   const [localLoading, setLocalLoading] = useState(false);
   const [localFundingLoading, setLocalFundingLoading] = useState(false);
+
+  // Diagnostics logs
   const [logs, setLogs] = useState<string[]>(["White & Orange Belt DApp initialized. Ready."]);
+
+  // Ref to hold the wallet kit instance
+  const kitRef = useRef<StellarWalletsKit | null>(null);
 
   const addLog = (message: string) => {
     setLogs((prev) => [...prev, `[${new Date().toLocaleTimeString()}] ${message}`]);
+  };
+
+  // Initialize StellarWalletsKit client-side
+  useEffect(() => {
+    kitRef.current = new StellarWalletsKit({
+      network: WalletNetwork.TESTNET,
+      modules: allowAllModules(),
+    });
+    addLog("StellarWalletsKit multi-wallet adapters successfully loaded.");
+  }, []);
+
+  // Multi-wallet connection flow
+  const connectWallet = async () => {
+    if (!kitRef.current) return;
+    setWalletLoading(true);
+    addLog("Opening multi-wallet connection modal...");
+    
+    try {
+      await kitRef.current.openModal({
+        onWalletSelected: async (option) => {
+          try {
+            kitRef.current!.setWallet(option.id);
+            const { address } = await kitRef.current!.getAddress();
+            setWalletAddress(address);
+            setWalletType(option.name);
+            addLog(`Wallet authorized successfully: ${address.slice(0, 10)}... via ${option.name}`);
+            toast.success("Wallet Connected", `Connected to ${option.name}`);
+            await fetchWalletBalance(address);
+          } catch (err: any) {
+            addLog(`Authentication failed: ${err.message || err}`);
+            toast.error("Auth Failed", err.message || "Failed to retrieve public key from wallet.");
+          }
+        },
+      });
+    } catch (err: any) {
+      console.error(err);
+      addLog(`Wallet connection failed: ${err.message || "User dismissed modal"}`);
+      toast.error("Connection Interrupted", err.message || "Wallet authorization closed by user.");
+    } finally {
+      setWalletLoading(false);
+    }
+  };
+
+  const disconnectWallet = () => {
+    setWalletAddress("");
+    setWalletBalance(null);
+    setWalletType("");
+    addLog("Wallet disconnected successfully.");
+    toast.info("Wallet Disconnected", "Browser wallet has been unlinked.");
+  };
+
+  const fetchWalletBalance = async (address: string) => {
+    if (!address) return;
+    addLog(`Retrieving XLM balance for ${address.slice(0, 8)}...`);
+    try {
+      const server = new Horizon.Server(TESTNET_HORIZON_URL);
+      const accountInfo = await server.loadAccount(address);
+      const nativeBalance = accountInfo.balances.find((b) => b.asset_type === "native");
+      const balanceVal = nativeBalance ? nativeBalance.balance : "0.0000";
+      setWalletBalance(balanceVal);
+      addLog(`Connected balance: ${balanceVal} XLM`);
+    } catch (err: any) {
+      addLog(`Balance retrieval failed: ${err.message}`);
+      setWalletBalance("0.0000");
+    }
   };
 
   // Local Wallet Sandbox Generation
@@ -78,15 +155,64 @@ export default function WhiteBeltToolbox() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div className="lg:col-span-2 space-y-6">
-        {/* Placeholder for Task 1: Connect Wallet (to satisfy tests) */}
+        {/* Wallet connection panel */}
         <div className="rounded-2xl border border-slate-800 bg-slate-950/40 p-6 backdrop-blur-xl shadow-2xl">
-          <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-            <Wallet className="h-5 w-5 text-indigo-400" />
-            Task 1: Connect Wallet (Multi-Wallet Adapter)
-          </h3>
-          <p className="text-xs text-slate-400 mt-1">
-            (Feature in development) Multi-wallet connection adapter is being implemented.
-          </p>
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+                <Wallet className="h-5 w-5 text-indigo-400" />
+                Task 1: Connect Wallet (Multi-Wallet Adapter)
+              </h3>
+              <p className="text-xs text-slate-400 mt-1">
+                Authorizes connection via freighter, xBull, Hana, or Albedo.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3">
+              {!walletAddress ? (
+                <Button variant="glow" onClick={connectWallet} disabled={walletLoading}>
+                  {walletLoading ? "Connecting..." : "Connect Wallet"}
+                </Button>
+              ) : (
+                <Button variant="outline" onClick={disconnectWallet}>
+                  Disconnect Wallet
+                </Button>
+              )}
+            </div>
+          </div>
+
+          {walletAddress && (
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-slate-900 pt-6">
+              <div className="p-4 rounded-xl border border-slate-800 bg-slate-950/60 flex flex-col justify-between">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-slate-400">Account Balance</span>
+                  <span className="text-[10px] bg-indigo-950/40 border border-indigo-900/30 text-indigo-400 px-2 py-0.5 rounded-full font-bold">
+                    {walletType}
+                  </span>
+                </div>
+                <div className="my-3 flex items-baseline gap-1.5">
+                  <span className="text-3xl font-extrabold text-white">
+                    {walletBalance !== null ? walletBalance : "..."}
+                  </span>
+                  <span className="text-xs font-bold text-slate-400">XLM</span>
+                </div>
+                <Button size="sm" variant="ghost" onClick={() => fetchWalletBalance(walletAddress)} className="w-full text-xs">
+                  <RefreshCw className="h-3 w-3 mr-1" />
+                  Sync Balance
+                </Button>
+              </div>
+
+              <div className="p-4 rounded-xl border border-slate-800 bg-slate-950/60">
+                <span className="text-xs text-slate-400 block mb-1">Public Key Address</span>
+                <code className="text-xs text-slate-300 break-all select-all font-mono block p-2.5 bg-slate-950 border border-slate-900 rounded-lg">
+                  {walletAddress}
+                </code>
+                <p className="text-[10px] text-slate-500 mt-2">
+                  Stellar Testnet ledger identity. Ensure Freighter is set to Testnet.
+                </p>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Placeholder for Soroban Smart Contract (to satisfy tests) */}
