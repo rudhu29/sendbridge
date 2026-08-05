@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Keypair, Horizon } from "@stellar/stellar-sdk";
+import { Keypair, Horizon, TransactionBuilder, Operation, Networks, Account, Asset, Transaction } from "@stellar/stellar-sdk";
 import { StellarWalletsKit, WalletNetwork, allowAllModules } from "@creit.tech/stellar-wallets-kit";
 import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 import { toast } from "./ui/toast";
-import { Terminal, Wallet, Shield, Layers, RefreshCw } from "lucide-react";
+import { Terminal, Wallet, Shield, Layers, RefreshCw, Send, CheckCircle2 } from "lucide-react";
 
 const TESTNET_HORIZON_URL = "https://horizon-testnet.stellar.org";
 
@@ -15,6 +16,12 @@ export default function WhiteBeltToolbox() {
   const [walletBalance, setWalletBalance] = useState<string | null>(null);
   const [walletType, setWalletType] = useState<string>("");
   const [walletLoading, setWalletLoading] = useState(false);
+
+  // XLM Payment state
+  const [recipient, setRecipient] = useState("");
+  const [amount, setAmount] = useState("");
+  const [sendLoading, setSendLoading] = useState(false);
+  const [sendTxHash, setSendTxHash] = useState<string | null>(null);
 
   // Local sandbox wallet (Task 1 local fallback)
   const [localKeypair, setLocalKeypair] = useState<{ publicKey: string; secretKey: string } | null>(null);
@@ -94,6 +101,69 @@ export default function WhiteBeltToolbox() {
     } catch (err: any) {
       addLog(`Balance retrieval failed: ${err.message}`);
       setWalletBalance("0.0000");
+    }
+  };
+
+  // On-chain XLM payment transfer
+  const sendXlm = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!walletAddress || !kitRef.current) {
+      toast.error("Wallet Required", "Please connect your wallet first.");
+      return;
+    }
+    if (!recipient || !amount) {
+      toast.error("Form Incomplete", "Please specify recipient and XLM amount.");
+      return;
+    }
+
+    const balanceNum = parseFloat(walletBalance || "0");
+    const amountNum = parseFloat(amount);
+    if (balanceNum < amountNum + 0.00001) {
+      addLog("Transaction cancelled: Insufficient balance to cover payment and fees.");
+      toast.error("Insufficient Balance", "You do not have enough XLM in your connected wallet.");
+      return;
+    }
+
+    setSendLoading(true);
+    setSendTxHash(null);
+    addLog(`Preparing payment of ${amount} XLM to ${recipient}...`);
+
+    try {
+      const server = new Horizon.Server(TESTNET_HORIZON_URL);
+      const accountInfo = await server.loadAccount(walletAddress);
+      const account = new Account(walletAddress, accountInfo.sequenceNumber());
+
+      const tx = new TransactionBuilder(account, {
+        fee: "100",
+        networkPassphrase: Networks.TESTNET,
+      })
+        .addOperation(
+          Operation.payment({
+            destination: recipient,
+            asset: Asset.native(),
+            amount: amount,
+          })
+        )
+        .setTimeout(30)
+        .build();
+
+      addLog(`Requesting transaction signature from ${walletType}...`);
+      const { signedTxXdr } = await kitRef.current.signTransaction(tx.toXDR());
+      const signedTx = new Transaction(signedTxXdr, Networks.TESTNET);
+      
+      addLog("Submitting signed transaction envelope to Horizon...");
+      const result = await server.submitTransaction(signedTx);
+      
+      setSendTxHash(result.hash);
+      addLog(`Payment successfully broadcast! Hash: ${result.hash}`);
+      toast.success("Payment Confirmed", "Transaction successfully validated on-chain.");
+      await fetchWalletBalance(walletAddress);
+    } catch (err: any) {
+      console.error(err);
+      addLog(`Payment failed: ${err.message || "Authorization rejected"}`);
+      toast.error("Payment Failed", err.message || "Wallet rejected signing request.");
+    } finally {
+      setSendLoading(false);
     }
   };
 
@@ -214,6 +284,67 @@ export default function WhiteBeltToolbox() {
             </div>
           )}
         </div>
+
+        {/* On-chain payments */}
+        {walletAddress && (
+          <div className="rounded-2xl border border-slate-800 bg-slate-950/40 p-6 backdrop-blur-xl shadow-2xl">
+            <h3 className="text-lg font-semibold text-white flex items-center gap-2 mb-4">
+              <Send className="h-5 w-5 text-indigo-400" />
+              Task 2: Send XLM Payment (Testnet)
+            </h3>
+
+            <form onSubmit={sendXlm} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <label className="text-xs text-slate-400 font-medium">Destination Public Address</label>
+                <Input
+                  placeholder="G..."
+                  value={recipient}
+                  onChange={(e) => setRecipient(e.target.value)}
+                  className="bg-slate-950 border-slate-800 text-xs text-slate-200"
+                  required
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs text-slate-400 font-medium">Amount (XLM)</label>
+                <div className="flex gap-2">
+                  <Input
+                    type="number"
+                    step="0.00001"
+                    placeholder="0.0"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    className="bg-slate-950 border-slate-800 text-xs text-slate-200"
+                    required
+                  />
+                  <Button type="submit" variant="glow" disabled={sendLoading}>
+                    {sendLoading ? "Sending..." : "Submit"}
+                  </Button>
+                </div>
+              </div>
+            </form>
+
+            {sendTxHash && (
+              <div className="mt-4 p-3 bg-emerald-950/20 border border-emerald-900/40 rounded-xl space-y-1">
+                <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-semibold">
+                  <CheckCircle2 className="h-4 w-4" />
+                  Transaction Successful
+                </div>
+                <code className="text-[9px] text-slate-300 break-all block p-1.5 bg-slate-950 rounded font-mono">
+                  {sendTxHash}
+                </code>
+                <a
+                  href={`https://stellar.expert/explorer/testnet/tx/${sendTxHash}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[10px] text-indigo-400 hover:text-indigo-300 font-bold block mt-1"
+                >
+                  View on Stellar Expert explorer ➔
+                </a>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Placeholder for Soroban Smart Contract (to satisfy tests) */}
         <div className="rounded-2xl border border-slate-800 bg-slate-950/40 p-6 backdrop-blur-xl shadow-2xl">
