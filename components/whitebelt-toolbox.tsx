@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Keypair, Horizon, TransactionBuilder, Operation, Networks, Account, Asset, Transaction } from "@stellar/stellar-sdk";
+import { Keypair, Horizon, TransactionBuilder, Operation, Networks, Account, Asset, Transaction, Contract } from "@stellar/stellar-sdk";
 import { StellarWalletsKit, WalletNetwork, allowAllModules } from "@creit.tech/stellar-wallets-kit";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -37,6 +37,8 @@ export default function WhiteBeltToolbox() {
   // Smart Contract state (Task 4)
   const [contractId, setContractId] = useState(DEFAULT_CONTRACT_ID);
   const [contractCounter, setContractCounter] = useState<number | null>(null);
+  const [contractStatus, setContractStatus] = useState<"Idle" | "Pending" | "Success" | "Failed">("Idle");
+  const [contractTxHash, setContractTxHash] = useState<string | null>(null);
   const [contractLoading, setContractLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
 
@@ -268,6 +270,55 @@ export default function WhiteBeltToolbox() {
     }
   };
 
+  // Write Data: Invoke increment method on the contract
+  const incrementContractValue = async () => {
+    if (!walletAddress || !kitRef.current) {
+      toast.error("Wallet Required", "Please connect a browser wallet first.");
+      return;
+    }
+    
+    setContractStatus("Pending");
+    setContractTxHash(null);
+    addLog(`Building transaction to invoke contract 'increment' method on: ${contractId.slice(0, 10)}...`);
+
+    try {
+      const server = new Horizon.Server(TESTNET_HORIZON_URL);
+      const accountInfo = await server.loadAccount(walletAddress);
+      const account = new Account(walletAddress, accountInfo.sequenceNumber());
+
+      const contractInstance = new Contract(contractId);
+
+      const tx = new TransactionBuilder(account, {
+        fee: "150",
+        networkPassphrase: Networks.TESTNET,
+      })
+        .addOperation(
+          contractInstance.call("increment")
+        )
+        .setTimeout(30)
+        .build();
+
+      addLog("Requesting Freighter/multi-wallet signature for contract call...");
+      const { signedTxXdr } = await kitRef.current.signTransaction(tx.toXDR());
+      const signedTx = new Transaction(signedTxXdr, Networks.TESTNET);
+      
+      addLog("Submitting invoke envelope to Soroban network...");
+      const result = await server.submitTransaction(signedTx);
+      
+      setContractTxHash(result.hash);
+      setContractStatus("Success");
+      addLog(`Soroban increment transaction confirmed! Hash: ${result.hash}`);
+      toast.success("Contract Updated", "Value successfully incremented on-chain!");
+      await readContractValue();
+      await fetchWalletBalance(walletAddress);
+    } catch (err: any) {
+      console.error(err);
+      setContractStatus("Failed");
+      addLog(`Soroban invocation failed: ${err.message || "User cancelled request."}`);
+      toast.error("Invocation Failed", err.message || "Signing or execution was cancelled.");
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div className="lg:col-span-2 space-y-6">
@@ -428,7 +479,52 @@ export default function WhiteBeltToolbox() {
                   Read Contract State
                 </Button>
               </div>
+
+              {/* Call increment */}
+              <div className="p-4 rounded-xl border border-slate-800 bg-slate-950/60 flex flex-col justify-between">
+                <div>
+                  <span className="text-xs text-slate-400 block mb-1">State Modifier (Write)</span>
+                  <p className="text-[10px] text-slate-500">
+                    Invokes the on-chain increment function. Requires connected wallet signature.
+                  </p>
+                </div>
+                <Button size="sm" variant="glow" onClick={incrementContractValue} disabled={contractStatus === "Pending"} className="w-full mt-3">
+                  {contractStatus === "Pending" ? "Invoking..." : "Invoke Increment"}
+                </Button>
+              </div>
+
+              {/* Status and events */}
+              <div className="p-4 rounded-xl border border-slate-800 bg-slate-950/60 flex flex-col justify-between">
+                <div>
+                  <span className="text-xs text-slate-400 block">Invocations Status</span>
+                  <span className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-bold ${
+                    contractStatus === "Success" ? "bg-emerald-950/40 text-emerald-400 border border-emerald-900/30" :
+                    contractStatus === "Failed" ? "bg-rose-950/40 text-rose-400 border border-rose-900/30" :
+                    contractStatus === "Pending" ? "bg-indigo-950/40 text-indigo-400 border border-indigo-900/30 animate-pulse" :
+                    "bg-slate-900 text-slate-400 border border-slate-800"
+                  }`}>
+                    {contractStatus}
+                  </span>
+                </div>
+              </div>
             </div>
+
+            {contractTxHash && (
+              <div className="p-3 bg-indigo-950/20 border border-indigo-900/40 rounded-xl space-y-1">
+                <span className="text-[10px] text-indigo-400 font-semibold block">Invoke Confirmation</span>
+                <code className="text-[9px] text-slate-300 break-all block p-1.5 bg-slate-950 rounded font-mono">
+                  {contractTxHash}
+                </code>
+                <a
+                  href={`https://stellar.expert/explorer/testnet/tx/${contractTxHash}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[10px] text-purple-400 hover:text-purple-300 font-bold block mt-1"
+                >
+                  View invoke receipt on explorer ➔
+                </a>
+              </div>
+            )}
           </div>
         </div>
       </div>
