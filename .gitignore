@@ -36,3 +36,6 @@ Thumbs.db
 /git_download.log
 /test.txt
 /rustup-init.exe
+
+.vercel
+.env*
