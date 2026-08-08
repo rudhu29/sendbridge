@@ -12,6 +12,7 @@ impl CounterContract {
         let mut count: u32 = env.storage().instance().get(&COUNTER).unwrap_or(0);
         count += 1;
         env.storage().instance().set(&COUNTER, &count);
+        env.events().publish((symbol_short!("counter"), symbol_short!("increment")), count);
         count
     }
 

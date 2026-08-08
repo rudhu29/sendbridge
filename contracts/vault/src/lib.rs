@@ -9,6 +9,7 @@ impl VaultContract {
     pub fn deposit_and_increment(env: Env, counter_id: Address) -> u32 {
         let args: Vec<Val> = Vec::new(&env);
         let new_count: u32 = env.invoke_contract(&counter_id, &symbol_short!("increment"), args);
+        env.events().publish((symbol_short!("vault"), symbol_short!("deposit")), new_count);
         new_count
     }
 }
