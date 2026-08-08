@@ -90,8 +90,37 @@ A production-quality dashboard built to satisfy both **Level 1 (White Belt)** an
 
 ---
 
-## 🔮 Future Improvements
+## 🥋 Level 3: Purple Belt & Mastery Specifications
 
-1. **Soroban Contract Deployment Script**: Automate contract updates using WASM compiler chains inside Ubuntu WSL.
-2. **Transaction History Feed**: Query the Horizon endpoint for past transactions of the connected address.
-3. **Enhanced Asset Management**: Support custom Stellar token trustlines (like USDC or custom stablecoins).
+### 🛡️ CI/CD Pipeline
+Every code commit pushed to the `main` branch automatically triggers the GitHub Actions pipeline:
+1. **Contracts Verification**: Compiles Rust Soroban contracts with `wasm32-unknown-unknown` and executes `cargo test` inside the Workspace runner.
+2. **Frontend Verification**: Downloads Node packages, compiles Next.js bundles, and executes 3 passing component assertions in `Vitest`.
+
+---
+
+### 🦀 Rust Smart Contracts Architecture
+Our Rust workspace is managed under the `/contracts` directory:
+1. **`counter`**: Standard state tracking contract implementing:
+   - `get_count(env: Env) -> u32`
+   - `increment(env: Env) -> u32`
+2. **`vault`**: Advanced contract performing **inter-contract calls**:
+   - `deposit_and_increment(env: Env, counter_id: Address) -> u32`: Constructively invokes the counter contract dynamically using the SDK's `invoke_contract` method.
+
+---
+
+### 🧪 Test Suites Run Guides
+
+#### 1. Smart Contract Tests (Rust)
+Executes compiled cargo assertions for `counter` state updates and `vault` inter-contract calls:
+```bash
+cd contracts
+cargo test
+```
+
+#### 2. DApp Frontend Tests (Vitest)
+Verifies client-side wallet connectors, local keypair generators, and logger panels in a virtual DOM environment:
+```bash
+npx vitest run
+```
+
