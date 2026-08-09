@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Keypair, Horizon, TransactionBuilder, Operation, Networks, Account, Asset, Transaction, Contract } from "@stellar/stellar-sdk";
+import { Keypair, Horizon, TransactionBuilder, Operation, Networks, Account, Asset, Transaction, Contract, Address, xdr } from "@stellar/stellar-sdk";
 import { StellarWalletsKit, WalletNetwork, allowAllModules } from "@creit.tech/stellar-wallets-kit";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -13,8 +13,9 @@ import {
 
 const TESTNET_HORIZON_URL = "https://horizon-testnet.stellar.org";
 const TESTNET_SOROBAN_RPC_URL = "https://soroban-testnet.stellar.org";
-// Standard deployed Testnet Incrementer contract ID for verification
-const DEFAULT_CONTRACT_ID = "CDJZDEAL3BDJWMXBBAWSAWSBAWSBAWSBAWSBAWSBAWSBAWSBAWSBAWSA";
+// Deployed Testnet Incrementer and Vault contract IDs for verification
+const DEFAULT_COUNTER_ID = "CA3W3ZZH7CRZU5YEHII6L6TQ3P3OJ5DMVB76URY3I74S3K6NBC5LWL4B";
+const DEFAULT_VAULT_ID = "CDQVQRVGMSL23OMWP45R5SHQ2C67TLYWW5CE6YBZPEC5HQWM6J7T4LXY";
 
 export default function WhiteBeltToolbox() {
   // Wallet state
@@ -36,12 +37,15 @@ export default function WhiteBeltToolbox() {
   const [localFundingLoading, setLocalFundingLoading] = useState(false);
 
   // Smart Contract state (Task 4)
-  const [contractId, setContractId] = useState(DEFAULT_CONTRACT_ID);
+  const [selectedContract, setSelectedContract] = useState<"counter" | "vault">("counter");
+  const [counterContractId, setCounterContractId] = useState(DEFAULT_COUNTER_ID);
+  const [vaultContractId, setVaultContractId] = useState(DEFAULT_VAULT_ID);
   const [contractCounter, setContractCounter] = useState<number | null>(null);
-  const [contractStatus, setContractStatus] = useState<"Idle" | "Pending" | "Success" | "Failed">("Idle");
+  const [contractStatus, setContractStatus] = useState<"Idle" | "Preparing" | "Awaiting Signature" | "Broadcasting" | "Success" | "Failed">("Idle");
   const [contractTxHash, setContractTxHash] = useState<string | null>(null);
   const [contractLoading, setContractLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [contractEvents, setContractEvents] = useState<string[]>([]);
 
   // Diagnostics logs
   const [logs, setLogs] = useState<string[]>(["White & Orange Belt DApp initialized. Ready."]);
@@ -236,17 +240,78 @@ export default function WhiteBeltToolbox() {
     }
   };
 
-  // Task 4: Soroban Smart Contract Interaction (Read / Write / Event Polling)
-  
-  // Read Data: Simulate contract call to `get_count` or fetch event history
+  // Read Data: Simulate contract call to `get_count`
   const readContractValue = async () => {
-    if (!contractId) return;
+    if (!counterContractId) return;
     setContractLoading(true);
-    addLog(`Querying state for Soroban contract: ${contractId.slice(0, 10)}...`);
+    addLog(`Querying state for counter contract: ${counterContractId.slice(0, 10)}...`);
     
     try {
-      // Simulate contract state or retrieve the latest increment ledger values
-      // We perform a simulated post query to Soroban RPC for robust value checking
+      const dummyAccount = new Account("GBAUMMVLM4OC2WWT4W2SVSXG2Z5JNWZVTKW3O7H2P6H66ZVT3H5W2N66", "0");
+      const contractInstance = new Contract(counterContractId);
+      const tx = new TransactionBuilder(dummyAccount, {
+        fee: "100",
+        networkPassphrase: Networks.TESTNET,
+      })
+      .addOperation(contractInstance.call("get_count"))
+      .setTimeout(30)
+      .build();
+
+      const txXdr = tx.toXDR();
+      const res = await fetch(TESTNET_SOROBAN_RPC_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          jsonrpc: "2.0",
+          id: 1,
+          method: "simulateTransaction",
+          params: {
+            transaction: txXdr
+          }
+        })
+      });
+
+      const data = await res.json();
+      if (data.result && data.result.results && data.result.results[0]) {
+        const resultXdr = data.result.results[0].xdr;
+        const scVal = xdr.ScVal.fromXDR(resultXdr, 'base64');
+        const count = scVal.u32();
+        setContractCounter(count);
+        addLog(`Read Counter Value from Ledger: ${count}`);
+      } else {
+        throw new Error("No simulation results returned from RPC.");
+      }
+    } catch (err: any) {
+      console.error(err);
+      addLog(`Failed to query contract value: ${err.message || err}`);
+    } finally {
+      setContractLoading(false);
+    }
+  };
+
+  // Poll contract events dynamically to show live updates
+  const pollContractEvents = async () => {
+    if (!counterContractId) return;
+    try {
+      const ledgerRes = await fetch(TESTNET_SOROBAN_RPC_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          jsonrpc: "2.0",
+          id: 1,
+          method: "getLatestLedger"
+        })
+      });
+      const ledgerData = await ledgerRes.json();
+      const latestLedger = ledgerData.result?.sequence;
+      if (!latestLedger) return;
+
+      const startLedger = Math.max(1, latestLedger - 1000);
+      const filterIds = [counterContractId];
+      if (vaultContractId) {
+        filterIds.push(vaultContractId);
+      }
+
       const res = await fetch(TESTNET_SOROBAN_RPC_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -255,91 +320,147 @@ export default function WhiteBeltToolbox() {
           id: 1,
           method: "getEvents",
           params: {
-            startLedger: 3120000,
-            filters: [{ type: "contract", contractIds: [contractId] }],
+            startLedger: startLedger,
+            filters: [{ type: "contract", contractIds: filterIds }],
             limit: 10
           }
         })
       });
 
       const data = await res.json();
-      // Count total increments in the event logs to get current counter value
-      const count = data.result?.events?.length || 0;
-      setContractCounter(count);
-      addLog(`Contract count read successfully: ${count}`);
+      const events = data.result?.events || [];
+      if (events.length > 0) {
+        const formattedEvents = events.map((ev: any) => {
+          const ledgerSeq = ev.ledger;
+          const contractLabel = ev.contractId === counterContractId ? "Counter" : "Vault";
+          
+          let parsedVal = "emitted event";
+          try {
+            if (ev.value && ev.value.xdr) {
+              const scVal = xdr.ScVal.fromXDR(ev.value.xdr, 'base64');
+              if (scVal.switch().name === 'scvU32') {
+                parsedVal = `incremented to ${scVal.u32()}`;
+              }
+            }
+          } catch {}
+          
+          return `[Ledger ${ledgerSeq}] ${contractLabel} contract ${parsedVal}`;
+        });
+        setContractEvents(formattedEvents);
+      }
     } catch (err: any) {
-      console.error(err);
-      // Fallback fallback counter to local state tracker if RPC fails
-      setContractCounter((prev) => (prev !== null ? prev : 12));
-      addLog("RPC event simulation returned mock state counter fallback.");
-    } finally {
-      setContractLoading(false);
+      console.error("Failed to poll events:", err);
     }
   };
 
-  // Write Data: Invoke `increment` method on the contract
+  // Write Data: Invoke `increment` or `deposit_and_increment`
   const incrementContractValue = async () => {
-    if (!walletAddress || !kitRef.current) {
-      toast.error("Wallet Required", "Please connect a browser wallet first.");
+    const currentContractId = selectedContract === "counter" ? counterContractId : vaultContractId;
+    if (!currentContractId) {
+      toast.error("Address Required", "Please specify the contract address.");
       return;
     }
     
-    setContractStatus("Pending");
+    // Error Type 1: Missing wallet connection
+    if (!walletAddress || !kitRef.current) {
+      addLog("Contract call failed: Wallet not connected.");
+      toast.error("Wallet Required", "Please connect a browser wallet first.");
+      return;
+    }
+
+    // Error Type 3: Low balance checking before simulation
+    const balanceNum = parseFloat(walletBalance || "0");
+    if (balanceNum < 2.0) {
+      addLog("Simulation aborted: XLM balance is too low (minimum 2.0 XLM recommended for Soroban gas/fees).");
+      toast.error("Low Balance", "You need at least 2 XLM to cover Soroban transaction resource fees.");
+      setContractStatus("Failed");
+      return;
+    }
+    
+    setContractStatus("Preparing");
     setContractTxHash(null);
-    addLog(`Building transaction to invoke contract 'increment' method on: ${contractId.slice(0, 10)}...`);
+    addLog(`Building transaction to invoke contract method on: ${currentContractId.slice(0, 10)}...`);
 
     try {
       const server = new Horizon.Server(TESTNET_HORIZON_URL);
       const accountInfo = await server.loadAccount(walletAddress);
       const account = new Account(walletAddress, accountInfo.sequenceNumber());
 
-      const contractInstance = new Contract(contractId);
+      const contractInstance = new Contract(currentContractId);
 
       // Build transaction invocation operation
+      let op;
+      if (selectedContract === "counter") {
+        op = contractInstance.call("increment");
+      } else {
+        const counterScVal = new Address(counterContractId).toScVal();
+        op = contractInstance.call("deposit_and_increment", counterScVal);
+      }
+
       const tx = new TransactionBuilder(account, {
         fee: "150",
         networkPassphrase: Networks.TESTNET,
       })
-        .addOperation(
-          contractInstance.call("increment")
-        )
+        .addOperation(op)
         .setTimeout(30)
         .build();
 
-      addLog("Requesting Freighter/multi-wallet signature for contract call...");
+      setContractStatus("Awaiting Signature");
+      addLog("Requesting transaction signature from browser wallet...");
+      
       const { signedTxXdr } = await kitRef.current.signTransaction(tx.toXDR());
       const signedTx = new Transaction(signedTxXdr, Networks.TESTNET);
       
-      addLog("Submitting invoke envelope to Soroban network...");
+      setContractStatus("Broadcasting");
+      addLog("Submitting signed transaction envelope to Soroban network...");
       const result = await server.submitTransaction(signedTx);
       
       setContractTxHash(result.hash);
       setContractStatus("Success");
-      addLog(`Soroban increment transaction confirmed! Hash: ${result.hash}`);
-      toast.success("Contract Updated", "Value successfully incremented on-chain!");
+      addLog(`Soroban call confirmed! Hash: ${result.hash}`);
+      toast.success("Contract Updated", "Method successfully executed on-chain!");
       await readContractValue();
       await fetchWalletBalance(walletAddress);
     } catch (err: any) {
       console.error(err);
+      const errorMsg = err.message || String(err);
+      
+      // Error Type 2: User rejected signing
+      if (
+        errorMsg.toLowerCase().includes("user reject") || 
+        errorMsg.toLowerCase().includes("cancel") || 
+        errorMsg.toLowerCase().includes("declined") || 
+        errorMsg.toLowerCase().includes("dismiss")
+      ) {
+        addLog("Signature rejected: User declined the signing request in their wallet.");
+        toast.error("Signature Declined", "You cancelled the signing request in your wallet.");
+        setContractStatus("Failed");
+        return;
+      }
+
+      // Error Type 3: Simulation or execution failure
+      addLog(`Soroban call failed: ${errorMsg}`);
+      toast.error("Invocation Failed", `The transaction could not be executed: ${errorMsg.slice(0, 80)}`);
       setContractStatus("Failed");
-      addLog(`Soroban invocation failed: ${err.message || "User cancelled request."}`);
-      toast.error("Invocation Failed", err.message || "Signing or execution was cancelled.");
     }
   };
 
   // Real-time Event Polling (Listener)
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    if (isListening && contractId) {
+    if (isListening && counterContractId) {
       addLog("Starting background real-time event listener polling...");
+      readContractValue();
+      pollContractEvents();
       interval = setInterval(() => {
         readContractValue();
-      }, 5000); // Poll every 5s
+        pollContractEvents();
+      }, 5000);
     } else {
       addLog("Event listener paused.");
     }
     return () => clearInterval(interval);
-  }, [isListening, contractId]);
+  }, [isListening, counterContractId, vaultContractId, selectedContract]);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -479,14 +600,61 @@ export default function WhiteBeltToolbox() {
           </div>
 
           <div className="space-y-4">
-            <div className="space-y-1.5">
-              <label className="text-xs text-slate-400 font-medium">Testnet Smart Contract ID</label>
-              <Input
-                value={contractId}
-                onChange={(e) => setContractId(e.target.value)}
-                className="bg-slate-950 border-slate-800 text-xs text-slate-200"
-              />
+            {/* Toggle selection */}
+            <div className="flex bg-slate-900/60 p-1.5 rounded-xl border border-slate-800/80 gap-2">
+              <button
+                type="button"
+                onClick={() => setSelectedContract("counter")}
+                className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-300 ${
+                  selectedContract === "counter"
+                    ? "bg-purple-600 text-white shadow-lg shadow-purple-600/20"
+                    : "text-slate-400 hover:text-white"
+                }`}
+              >
+                Direct Counter Call
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedContract("vault")}
+                className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-300 ${
+                  selectedContract === "vault"
+                    ? "bg-purple-600 text-white shadow-lg shadow-purple-600/20"
+                    : "text-slate-400 hover:text-white"
+                }`}
+              >
+                Vault Inter-Contract Call
+              </button>
             </div>
+
+            {selectedContract === "counter" ? (
+              <div className="space-y-1.5">
+                <label className="text-xs text-slate-400 font-medium">Counter Contract ID</label>
+                <Input
+                  value={counterContractId}
+                  onChange={(e) => setCounterContractId(e.target.value)}
+                  className="bg-slate-950 border-slate-800 text-xs text-slate-200"
+                />
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs text-slate-400 font-medium">Vault Contract ID</label>
+                  <Input
+                    value={vaultContractId}
+                    onChange={(e) => setVaultContractId(e.target.value)}
+                    className="bg-slate-950 border-slate-800 text-xs text-slate-200"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs text-slate-400 font-medium">Counter Contract ID (Target)</label>
+                  <Input
+                    value={counterContractId}
+                    onChange={(e) => setCounterContractId(e.target.value)}
+                    className="bg-slate-950 border-slate-800 text-xs text-slate-200"
+                  />
+                </div>
+              </div>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Counter status */}
@@ -507,11 +675,15 @@ export default function WhiteBeltToolbox() {
                 <div>
                   <span className="text-xs text-slate-400 block mb-1">State Modifier (Write)</span>
                   <p className="text-[10px] text-slate-500">
-                    Invokes the on-chain increment function. Requires connected wallet signature.
+                    {selectedContract === "counter" 
+                      ? "Invokes the on-chain increment function directly." 
+                      : "Invokes deposit_and_increment on Vault, making a cross-contract call to Counter."}
                   </p>
                 </div>
-                <Button size="sm" variant="glow" onClick={incrementContractValue} disabled={contractStatus === "Pending"} className="w-full mt-3">
-                  {contractStatus === "Pending" ? "Invoking..." : "Invoke Increment"}
+                <Button size="sm" variant="glow" onClick={incrementContractValue} disabled={contractStatus !== "Idle" && contractStatus !== "Success" && contractStatus !== "Failed"} className="w-full mt-3">
+                  {contractStatus === "Idle" || contractStatus === "Success" || contractStatus === "Failed"
+                    ? (selectedContract === "counter" ? "Invoke Increment" : "Invoke Deposit & Inc")
+                    : contractStatus}
                 </Button>
               </div>
 
@@ -519,10 +691,10 @@ export default function WhiteBeltToolbox() {
               <div className="p-4 rounded-xl border border-slate-800 bg-slate-950/60 flex flex-col justify-between">
                 <div>
                   <span className="text-xs text-slate-400 block">Invocations Status</span>
-                  <span className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-bold ${
+                  <span className={`inline-block mt-2 px-3 py-1 rounded-full text-[10px] font-bold ${
                     contractStatus === "Success" ? "bg-emerald-950/40 text-emerald-400 border border-emerald-900/30" :
                     contractStatus === "Failed" ? "bg-rose-950/40 text-rose-400 border border-rose-900/30" :
-                    contractStatus === "Pending" ? "bg-indigo-950/40 text-indigo-400 border border-indigo-900/30 animate-pulse" :
+                    contractStatus !== "Idle" ? "bg-indigo-950/40 text-indigo-400 border border-indigo-900/30 animate-pulse" :
                     "bg-slate-900 text-slate-400 border border-slate-800"
                   }`}>
                     {contractStatus}
@@ -536,6 +708,24 @@ export default function WhiteBeltToolbox() {
                 >
                   {isListening ? "Stop Listener" : "Start Live Listener"}
                 </Button>
+              </div>
+            </div>
+
+            {/* Event notifications activity feed */}
+            <div className="p-4 rounded-xl border border-slate-800 bg-slate-950/60 flex flex-col h-[160px] mt-4">
+              <span className="text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider block">
+                On-Chain Event Notifications
+              </span>
+              <div className="flex-1 bg-slate-950 border border-slate-900 rounded-lg p-2.5 overflow-y-auto font-mono text-[9px] text-indigo-300 space-y-1">
+                {contractEvents.length === 0 ? (
+                  <div className="text-slate-500 italic text-center py-6">No contract events polled. Try invoking or start listener.</div>
+                ) : (
+                  contractEvents.map((ev, i) => (
+                    <div key={i} className="leading-relaxed border-b border-slate-900/50 pb-1 flex items-center justify-between">
+                      <span>{ev}</span>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
 

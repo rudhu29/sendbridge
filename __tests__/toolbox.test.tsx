@@ -33,4 +33,9 @@ describe("WhiteBeltToolbox Component Tests", () => {
     render(<WhiteBeltToolbox />);
     expect(screen.getByText(/DApp Diagnostics Logger/i)).toBeDefined();
   });
+
+  test("renders the Soroban contract module card", () => {
+    render(<WhiteBeltToolbox />);
+    expect(screen.getByText(/Soroban Smart Contract/i)).toBeDefined();
+  });
 });
