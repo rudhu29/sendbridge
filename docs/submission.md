@@ -45,9 +45,10 @@ This document contains verification records and challenge proofs for both the **
 ---
 
 ### Task 2: Smart Contract Read
-- **Mechanism**: Performs simulations against the deployed Testnet Incrementer contract:
-  - **Contract ID**: `CDJZDEAL3BDJWMXBBAWSAWSBAWSBAWSBAWSBAWSBAWSBAWSBAWSBAWSA`
-  - Reads the current counter value using Horizon RPC event summaries.
+- **Mechanism**: Performs simulations against the deployed Testnet Incrementer and Vault contracts:
+  - **Counter Contract ID**: `CA3W3ZZH7CRZU5YEHII6L6TQ3P3OJ5DMVB76URY3I74S3K6NBC5LWL4B`
+  - **Vault Contract ID**: `CDQVQRVGMSL23OMWP45R5SHQ2C67TLYWW5CE6YBZPEC5HQWM6J7T4LXY`
+  - Reads the current counter value using simulated transactions to the Testnet RPC.
 
 > [!NOTE]
 > **Evaluation Screenshot**: Capture a screenshot of the "Soroban Smart Contract" panel showing the counter value successfully fetched from the Testnet contract.
@@ -55,8 +56,8 @@ This document contains verification records and challenge proofs for both the **
 ---
 
 ### Task 3: Smart Contract Write
-- **Mechanism**: Builds a transaction calling the contract `increment` method, signs it with the user's selected browser wallet, and submits it. Shows state transitions:
-  - `Idle` ➔ `Pending` (during wallet signature and broadcasting) ➔ `Success` or `Failed`.
+- **Mechanism**: Builds a transaction calling either the contract `increment` method (direct) or `deposit_and_increment` (cross-contract call via Vault), signs it with the user's selected browser wallet, and submits it. Shows state transitions:
+  - `Idle` ➔ `Preparing` ➔ `Awaiting Signature` ➔ `Broadcasting` ➔ `Success` / `Failed`.
 
 > [!NOTE]
 > **Evaluation Screenshot**: Capture a screenshot showing the status label in `Success` state along with the transaction hash confirming your contract call.
@@ -64,13 +65,15 @@ This document contains verification records and challenge proofs for both the **
 ---
 
 ### Task 4: Real-Time Event Listener
-- **Mechanism**: When "Start Live Listener" is toggled, a polling interval queries the network for contract events every 5 seconds. If the counter changes on-chain (even by another user), the UI value auto-updates in real time.
+- **Mechanism**: When "Start Live Listener" is toggled, a polling interval queries the network for contract events every 5 seconds. If the counter changes on-chain (either through the Counter or Vault contract), the event log updates in real-time, displaying ledger heights.
 
 ---
 
 ## 🛠️ On-Chain Proofs
 
-- **Deployed Contract ID**: `CDJZDEAL3BDJWMXBBAWSAWSBAWSBAWSBAWSBAWSBAWSBAWSBAWSBAWSA`
-- **Successful Contract Call Hash**: `[Submit your transaction hash here after invoking "Increment Value" on the dashboard]`
+- **Counter Deployed Contract ID**: `CA3W3ZZH7CRZU5YEHII6L6TQ3P3OJ5DMVB76URY3I74S3K6NBC5LWL4B`
+- **Counter Instantiation Hash**: `85cd00e47e6f79cad58293dd57a1701c0127c363bcaa3b93e6414d26c790ea69`
+- **Vault Deployed Contract ID**: `CDQVQRVGMSL23OMWP45R5SHQ2C67TLYWW5CE6YBZPEC5HQWM6J7T4LXY`
+- **Vault Instantiation Hash**: `22c3c1149e038941dc7fa5dfffb68ccd22ac8768f3541ff8f409634a86945be7`
 - **Horizon Testnet URL**: `https://horizon-testnet.stellar.org`
 - **Soroban RPC Testnet URL**: `https://soroban-testnet.stellar.org`
