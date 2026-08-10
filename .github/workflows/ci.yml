@@ -24,6 +24,11 @@ jobs:
           cd contracts
           cargo test
 
+      - name: Compile Soroban Contracts targeting Wasm32
+        run: |
+          cd contracts
+          cargo build --target wasm32-unknown-unknown --release
+
   frontend-app:
     name: Build & Test Next.js App
     runs-on: ubuntu-latest

@@ -22,14 +22,11 @@ fn test_vault_intercontract_call() {
     let counter_id = env.register_contract(None, MockCounter);
     
     let vault_id = env.register_contract(None, VaultContract);
+    let client = super::VaultContractClient::new(&env, &vault_id);
     
     // We call deposit_and_increment on Vault, which calls MockCounter
     // We expect it to return 1 (mock counter incremented)
-    let val: u32 = env.invoke_contract(
-        &vault_id,
-        &symbol_short!("deposit_and_increment"),
-        soroban_sdk::vec![&env, counter_id.into()],
-    );
+    let val = client.deposit_and_increment(&counter_id);
 
     assert_eq!(val, 1);
 }
