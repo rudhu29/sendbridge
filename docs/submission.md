@@ -73,7 +73,9 @@ This document contains verification records and challenge proofs for both the **
 
 - **Counter Deployed Contract ID**: `CA3W3ZZH7CRZU5YEHII6L6TQ3P3OJ5DMVB76URY3I74S3K6NBC5LWL4B`
 - **Counter Instantiation Hash**: `85cd00e47e6f79cad58293dd57a1701c0127c363bcaa3b93e6414d26c790ea69`
+- **Counter Interaction Call Hash**: `43a6f5ee9fa65540bfc0f57d0e51c0e574472529aa8ae7f1f793d9195ae9e916`
 - **Vault Deployed Contract ID**: `CDQVQRVGMSL23OMWP45R5SHQ2C67TLYWW5CE6YBZPEC5HQWM6J7T4LXY`
 - **Vault Instantiation Hash**: `22c3c1149e038941dc7fa5dfffb68ccd22ac8768f3541ff8f409634a86945be7`
+- **Vault (Inter-Contract) Interaction Call Hash**: `e5d9e6a3347730b389f7030b58f0edf28eb7b7015be608e35d5b8c3c50476e93`
 - **Horizon Testnet URL**: `https://horizon-testnet.stellar.org`
 - **Soroban RPC Testnet URL**: `https://soroban-testnet.stellar.org`
