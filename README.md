@@ -108,20 +108,27 @@ Our Rust workspace is managed under the `/contracts` directory:
    - `increment(env: Env) -> u32`
 2. **`vault`**: Advanced contract performing **inter-contract calls**:
    - `deposit_and_increment(env: Env, counter_id: Address) -> u32`: Constructively invokes the counter contract dynamically using the SDK's `invoke_contract` method.
+3. **`remittance`**: On-chain KYC-gated remittance contract:
+   - `initialize(env: Env, admin: Address)`
+   - `set_kyc(env: Env, admin: Address, user: Address, status: bool)`
+   - `get_kyc(env: Env, user: Address) -> bool`
+   - `set_rate(env: Env, admin: Address, currency: Symbol, rate: u32)`
+   - `get_rate(env: Env, currency: Symbol) -> u32`
+   - `send_remittance(env: Env, sender: Address, receiver: Address, token: Address, amount: i128, currency: Symbol)`
 
 ---
 
 ### 🧪 Test Suites Run Guides
 
 #### 1. Smart Contract Tests (Rust)
-Executes compiled cargo assertions for `counter` state updates and `vault` inter-contract calls:
+Executes compiled cargo assertions for counter, vault inter-contract calls, and remittance rate conversion & gating logic:
 ```bash
 cd contracts
 cargo test
 ```
 
 #### 2. DApp Frontend Tests (Vitest)
-Verifies client-side wallet connectors, local keypair generators, and logger panels in a virtual DOM environment:
+Verifies client-side wallet connectors, remittance calculators, feedback widgets, SLA logs, and event listeners in a virtual DOM environment:
 ```bash
 npx vitest run
 ```

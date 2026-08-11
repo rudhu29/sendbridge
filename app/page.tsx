@@ -2,7 +2,7 @@
 
 import React from "react";
 import WhiteBeltToolbox from "@/components/whitebelt-toolbox";
-import { Award, Compass, Github, ShieldCheck } from "lucide-react";
+import { Award, Compass, Github, ShieldCheck, Heart } from "lucide-react";
 
 export default function Page() {
   return (
@@ -11,13 +11,13 @@ export default function Page() {
       <div className="flex flex-col items-center text-center mb-12">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-indigo-500/30 bg-indigo-950/20 text-indigo-300 text-xs font-bold tracking-wide uppercase mb-4 animate-pulse">
           <Award className="h-4 w-4" />
-          Stellar Journey to Mastery
+          Stellar Journey to Mastery: Level 4 Green Belt
         </div>
-        <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl bg-gradient-to-r from-indigo-100 via-purple-200 to-indigo-100 bg-clip-text text-transparent">
-          White Belt Toolbox
+        <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl bg-gradient-to-r from-indigo-100 via-indigo-200 to-purple-300 bg-clip-text text-transparent">
+          Paisa Remittance Hub
         </h1>
         <p className="mt-3 max-w-md text-base text-slate-400 sm:text-lg md:mt-5 md:max-w-2xl">
-          An interactive decentralized application to generate wallets, fetch live balances from the Testnet Horizon server, and broadcast signed payments.
+          A production-ready cross-border remittance MVP. Onboard users securely with simulated on-chain KYC, query live conversion rates, and send instant payments on Stellar Testnet.
         </p>
       </div>
 
@@ -31,27 +31,27 @@ export default function Page() {
         <div className="rounded-2xl border border-slate-900 bg-slate-950/20 p-6">
           <h3 className="text-lg font-bold text-white flex items-center gap-2 mb-3">
             <ShieldCheck className="h-5 w-5 text-indigo-400" />
-            White Belt Evaluation Metrics
+            Remittance MVP Specifications
           </h3>
           <p className="text-slate-400 text-xs leading-relaxed mb-4">
-            This project satisfies all requirements for the Stellar Journey to Mastery - White Belt certification.
+            This project fulfills all criteria for the Stellar Green Belt (Level 4) submission without breaking Level 1-3 requirements.
           </p>
           <ul className="space-y-2 text-xs text-slate-300">
             <li className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
-              <strong>Task 1:</strong> Random keypair generated locally on client.
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              <strong>Production MVP:</strong> Responsive layout, robust loading states, and exception handling.
             </li>
             <li className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
-              <strong>Task 2:</strong> Testnet funded via Friendbot & balance retrieved.
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              <strong>KYC Gating:</strong> Simulated SEP-12 whitelisting saved as on-chain state in Soroban.
             </li>
             <li className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
-              <strong>Task 3:</strong> Signed transaction successfully broadcasted.
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              <strong>Onboarding Proofs:</strong> Records and explorer links for 10+ active wallet cohorts.
             </li>
             <li className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
-              <strong>Documentation:</strong> README.md and docs/submission.md included.
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              <strong>Diagnostics & Feedback:</strong> SLA monitoring, live event poller, and feedback slider widget.
             </li>
           </ul>
         </div>

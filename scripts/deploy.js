@@ -69,7 +69,7 @@ async function main() {
     let account = new Account(deployer.publicKey(), accountInfo.sequenceNumber());
 
     // 1. Upload Counter WASM
-    const counterWasmPath = path.join(__dirname, '../contracts/target/wasm32-unknown-unknown/release/soroban_counter_contract.wasm');
+    const counterWasmPath = path.join(__dirname, '../contracts/target/wasm32v1-none/release/soroban_counter_contract.wasm');
     console.log(`Reading Counter WASM from ${counterWasmPath}...`);
     const counterWasm = fs.readFileSync(counterWasmPath);
     const counterWasmHash = crypto.createHash('sha256').update(counterWasm).digest();
@@ -113,7 +113,7 @@ async function main() {
     account = new Account(deployer.publicKey(), accountInfo.sequenceNumber());
 
     // 3. Upload Vault WASM
-    const vaultWasmPath = path.join(__dirname, '../contracts/target/wasm32-unknown-unknown/release/soroban_vault_contract.wasm');
+    const vaultWasmPath = path.join(__dirname, '../contracts/target/wasm32v1-none/release/soroban_vault_contract.wasm');
     console.log(`Reading Vault WASM from ${vaultWasmPath}...`);
     const vaultWasm = fs.readFileSync(vaultWasmPath);
     const vaultWasmHash = crypto.createHash('sha256').update(vaultWasm).digest();
