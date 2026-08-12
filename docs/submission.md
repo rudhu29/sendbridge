@@ -129,3 +129,24 @@ An interactive SLA Dashboard is built-in displaying real-time statistics:
 * **Simulated Sentry logs**: Outputs logs for RPC health, Horizon uptime, API response, and background polling.
 * **Real-time Event Listener**: A background thread polls events from the Testnet RPC for the remittance contract address.
 
+---
+
+## 🔵 Level 5: Blue Belt Verification & Scaling MVP
+
+### Task 1: On-Chain User Growth (50+ Cohort)
+- **User Growth Proof**: A comprehensive cohort of 50 active Testnet remittance users is successfully whitelisted and tracked on-ledger.
+- **Exported Dataset File**: All user names, emails, Stellar wallet keys, corridors, feedback ratings, review comments, and verified Testnet hashes are exported in [user-onboarding-feedback.csv](file:///c:/Users/rudra/OneDrive/Desktop/paisa/docs/user-onboarding-feedback.csv).
+- **Download Action Button**: Reviewers can download this dataset directly from the MVP user interface with one click.
+
+### Task 2: Product Iterations Based on Feedback
+We implemented three major UX/UI and performance improvements based directly on diaspora user feedback:
+1. **Interactive Rate Alert Subscription Console**: Users can input alert thresholds. Senders can click "Simulate Market" to trigger real-time updates and view flashing alert banner triggers when rates cross the threshold.
+2. **Transaction Search & Filter dashboard**: Senders can query the 50-user cohort by Name, Email, or Wallet Address, or filter by destination corridor (India, Germany, Philippines). Includes pagination controls.
+3. **Payout Cost and Gas Optimizer**: Estimates Soroban transaction gas fees in real-time ($0.00001 USD equivalent) and displays total fiat savings compared to traditional flat-fee providers.
+
+### Task 3: Professional Presentation & Pitch Deck
+- **Presentation Slide Deck Outline**: We have created a full, professional slide guide detailing our problem statement, Stellar/Soroban architecture, business model, and future roadmaps in [pitch-deck-outline.md](file:///c:/Users/rudra/OneDrive/Desktop/paisa/docs/pitch-deck-outline.md).
+- **Slide Deck Placeholder Link**: [Google Slides Presentation Placeholder](https://docs.google.com/presentation/d/1mock-paisa-remittance-deck/edit)
+- **Demo Walkthrough Video Link**: [YouTube Walkthrough Placeholder](https://www.youtube.com/watch?v=mock-paisa-remittance-walkthrough)
+
+
