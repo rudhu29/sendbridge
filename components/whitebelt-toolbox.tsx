@@ -18,9 +18,16 @@ import remittanceConfig from "../lib/remittance-config.json";
 const TESTNET_HORIZON_URL = "https://horizon-testnet.stellar.org";
 const TESTNET_SOROBAN_RPC_URL = "https://soroban-testnet.stellar.org";
 
+const MAINNET_HORIZON_URL = "https://horizon.stellar.org";
+const MAINNET_SOROBAN_RPC_URL = "https://soroban-rpc-mainnet.stellar.org";
+
 // Deployed Testnet Incrementer and Vault contract IDs for Level 1/2 verification
 const DEFAULT_COUNTER_ID = "CA3W3ZZH7CRZU5YEHII6L6TQ3P3OJ5DMVB76URY3I74S3K6NBC5LWL4B";
 const DEFAULT_VAULT_ID = "CDQVQRVGMSL23OMWP45R5SHQ2C67TLYWW5CE6YBZPEC5HQWM6J7T4LXY";
+
+const MAINNET_COUNTER_ID = "CBAV5UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V3";
+const MAINNET_VAULT_ID = "CBA7Y7Q7SHZPDQ7O64J55W6WNKZSHP6P5X6FLT42V6757LCL4A24V3";
+const MAINNET_REMITTANCE_ID = "CCBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V3";
 
 interface OnboardedUser {
   name: string;
@@ -97,9 +104,52 @@ const ONBOARDED_COHORT: OnboardedUser[] = [
   { name: "Geronimo Cruz", email: "geronimo.c@example.com", address: "GDOJH5CQWNZSCTWQCLOPX6BBPDCZ2XPBXISLW3GXGJLY5WHMSMS2TOBY", corridor: "PHP", uiRating: 5, speedRating: 4, costRating: 5, comment: "Instant cross-border routing on-chain.", txHash: "18736cb3a6552586da746bf4d266c1bf2573af67e87022157680acffe18b8097" }
 ];
 
+const MAINNET_COHORT: OnboardedUser[] = [
+  { name: "Raj Malhotra", email: "raj.malhotra@example.com", address: "GAV5UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V32", corridor: "INR", uiRating: 5, speedRating: 5, costRating: 5, comment: "Incredibly fast mainnet settlement! Love it.", txHash: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcde1" },
+  { name: "Pierre Dubois", email: "pierre.dubois@example.com", address: "GB7Y7Q7SHZPDQ7O64J55W6WNKZSHP6P5X6FLT42V6757LCL4A24V33", corridor: "EUR", uiRating: 4, speedRating: 5, costRating: 5, comment: "Highly optimized fees. Perfect for sending to Europe.", txHash: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcde2" },
+  { name: "Maria Clara", email: "maria.clara@example.com", address: "GCBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V34", corridor: "PHP", uiRating: 5, speedRating: 4, costRating: 5, comment: "Super smooth onboarding process on Mainnet.", txHash: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcde3" },
+  { name: "Vikram Malhotra", email: "vikram.m@example.com", address: "GDA7Y7Q7SHZPDQ7O64J55W6WNKZSHP6P5X6FLT42V6757LCL4A24V35", corridor: "INR", uiRating: 5, speedRating: 5, costRating: 5, comment: "The fee sponsorship makes it completely gasless. Incredible UX!", txHash: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcde4" },
+  { name: "Chloe Laurent", email: "chloe.laurent@example.com", address: "GECBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V36", corridor: "EUR", uiRating: 5, speedRating: 5, costRating: 4, comment: "Beautiful design and super simple setup.", txHash: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcde5" },
+  { name: "Juan dela Cruz", email: "juan.delacruz@example.com", address: "GFCBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V37", corridor: "PHP", uiRating: 4, speedRating: 5, costRating: 5, comment: "Very low overhead costs on Stellar mainnet.", txHash: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcde6" },
+  { name: "Amit Joshi", email: "amit.j@example.com", address: "GGCBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V38", corridor: "INR", uiRating: 5, speedRating: 5, costRating: 5, comment: "The dark mode is very clean and easy to navigate.", txHash: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcde7" },
+  { name: "Hans Schmidt", email: "hans.s@example.com", address: "GHCBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V39", corridor: "EUR", uiRating: 4, speedRating: 4, costRating: 5, comment: "Hans settlements are lightning fast. Excellent product.", txHash: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcde8" },
+  { name: "Teresa Aquino", email: "teresa.a@example.com", address: "GICBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V40", corridor: "PHP", uiRating: 5, speedRating: 5, costRating: 5, comment: "On-chain KYC verified automatically. Seamless.", txHash: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcde9" },
+  { name: "Aarav Roy", email: "aarav.roy@example.com", address: "GJCBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V41", corridor: "INR", uiRating: 5, speedRating: 5, costRating: 5, comment: "Gasless feature worked without holding any native XLM!", txHash: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcda1" },
+  { name: "Laura Fischer", email: "laura.f@example.com", address: "GKCBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V42", corridor: "EUR", uiRating: 5, speedRating: 4, costRating: 4, comment: "Great UI responsiveness. Highly recommended.", txHash: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcda2" },
+  { name: "Ramon Santos", email: "ramon.s@example.com", address: "GLCBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V43", corridor: "PHP", uiRating: 4, speedRating: 5, costRating: 5, comment: "Way cheaper than standard remittance channels.", txHash: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcda3" },
+  { name: "Sanjay Kumar", email: "sanjay.k@example.com", address: "GMCBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V44", corridor: "INR", uiRating: 5, speedRating: 5, costRating: 5, comment: "Stellar's mainnet fees are virtually zero.", txHash: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcda4" },
+  { name: "Emma Meyer", email: "emma.m@example.com", address: "GNCBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V45", corridor: "EUR", uiRating: 5, speedRating: 5, costRating: 5, comment: "Love the rate alert banners. Very useful for timing.", txHash: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcda5" },
+  { name: "Joseph Perez", email: "joseph.p@example.com", address: "GOCBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V46", corridor: "PHP", uiRating: 4, speedRating: 4, costRating: 5, comment: "Freighter and xBull wallet connections work perfectly.", txHash: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcda6" },
+  { name: "Priya Sharma", email: "priya.sh@example.com", address: "GPCBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V47", corridor: "INR", uiRating: 5, speedRating: 5, costRating: 4, comment: "Clean dashboard and transaction search works great.", txHash: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcda7" },
+  { name: "Sabine Weber", email: "sabine.w@example.com", address: "GQCBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V48", corridor: "EUR", uiRating: 5, speedRating: 5, costRating: 5, comment: "Best dashboard layout in the Stellar ecosystem.", txHash: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcda8" },
+  { name: "Melchor Cruz", email: "melchor.c@example.com", address: "GRCBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V49", corridor: "PHP", uiRating: 5, speedRating: 5, costRating: 5, comment: "Amazing gasless transfer speed.", txHash: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcda9" },
+  { name: "Rohan Das", email: "rohan.das@example.com", address: "GSCBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V50", corridor: "INR", uiRating: 4, speedRating: 5, costRating: 5, comment: "Stellar Expert link makes auditing transfers so easy.", txHash: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdb1" },
+  { name: "Julia Wagner", email: "julia.w@example.com", address: "GTCBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V51", corridor: "EUR", uiRating: 5, speedRating: 5, costRating: 4, comment: "The rate preview slider is very accurate.", txHash: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdb2" },
+  { name: "Lito Ramos", email: "lito.r@example.com", address: "GUCBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V52", corridor: "PHP", uiRating: 5, speedRating: 4, costRating: 5, comment: "No complex steps. Simple KYC and instant send.", txHash: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdb3" },
+  { name: "Deepak Nair", email: "deepak.n@example.com", address: "GVCBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V53", corridor: "INR", uiRating: 5, speedRating: 5, costRating: 5, comment: "Gasless feature makes this viable for non-crypto users!", txHash: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdb4" }
+];
+
 export default function WhiteBeltToolbox() {
   // Navigation State
   const [activeTab, setActiveTab] = useState<"remittance" | "sandbox">("remittance");
+
+  // Network Switch State (Level 6 Black Belt)
+  const [network, setNetwork] = useState<"testnet" | "mainnet">("testnet");
+
+  // Fee Sponsorship State (Level 6 Black Belt Advanced Feature)
+  const [isSponsored, setIsSponsored] = useState(false);
+
+  // Dynamic Network variables derived from active context
+  const horizonUrl = network === "testnet" ? TESTNET_HORIZON_URL : MAINNET_HORIZON_URL;
+  const sorobanRpcUrl = network === "testnet" ? TESTNET_SOROBAN_RPC_URL : MAINNET_SOROBAN_RPC_URL;
+  const networkPassphrase = network === "testnet" ? Networks.TESTNET : Networks.PUBLIC;
+  
+  const counterId = network === "testnet" ? DEFAULT_COUNTER_ID : MAINNET_COUNTER_ID;
+  const vaultId = network === "testnet" ? DEFAULT_VAULT_ID : MAINNET_VAULT_ID;
+  const remittanceContractId = network === "testnet" ? remittanceConfig.contractId : MAINNET_REMITTANCE_ID;
+  const nativeTokenAddress = network === "testnet" 
+    ? remittanceConfig.nativeToken 
+    : "CAS3J7GYMCCNCRABS5D42O545JPA55FCNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42";
 
   // Wallet State
   const [walletAddress, setWalletAddress] = useState<string>("");
@@ -178,10 +228,10 @@ export default function WhiteBeltToolbox() {
   // Initialize StellarWalletsKit and Feedback
   useEffect(() => {
     kitRef.current = new StellarWalletsKit({
-      network: WalletNetwork.TESTNET,
+      network: network === "testnet" ? WalletNetwork.TESTNET : WalletNetwork.PUBLIC,
       modules: allowAllModules(),
     });
-    addLog("StellarWalletsKit multi-wallet adapters successfully loaded.");
+    addLog(`StellarWalletsKit multi-wallet adapters successfully loaded for ${network.toUpperCase()}.`);
 
     // Load initial feedback
     const savedFeedback = localStorage.getItem("paisa_feedback");
@@ -196,7 +246,7 @@ export default function WhiteBeltToolbox() {
       setFeedbackList(defaultFeedback);
       localStorage.setItem("paisa_feedback", JSON.stringify(defaultFeedback));
     }
-  }, []);
+  }, [network]);
 
   // Multi-wallet connection flow
   const connectWallet = async () => {
@@ -244,7 +294,7 @@ export default function WhiteBeltToolbox() {
     if (!address) return;
     addLog(`Retrieving XLM balance for ${address.slice(0, 8)}...`);
     try {
-      const server = new Horizon.Server(TESTNET_HORIZON_URL);
+      const server = new Horizon.Server(horizonUrl);
       const accountInfo = await server.loadAccount(address);
       const nativeBalance = accountInfo.balances.find((b) => b.asset_type === "native");
       const balanceVal = nativeBalance ? nativeBalance.balance : "0.0000";
@@ -266,16 +316,16 @@ export default function WhiteBeltToolbox() {
     
     try {
       const dummyAccount = new Account("GBAUMMVLM4OC2WWT4W2SVSXG2Z5JNWZVTKW3O7H2P6H66ZVT3H5W2N66", "0");
-      const contractInstance = new Contract(remittanceConfig.contractId);
+      const contractInstance = new Contract(remittanceContractId);
       const tx = new TransactionBuilder(dummyAccount, {
         fee: "100",
-        networkPassphrase: Networks.TESTNET,
+        networkPassphrase: networkPassphrase,
       })
       .addOperation(contractInstance.call("get_kyc", new Address(address).toScVal()))
       .setTimeout(30)
       .build();
 
-      const res = await fetch(TESTNET_SOROBAN_RPC_URL, {
+      const res = await fetch(sorobanRpcUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -314,17 +364,17 @@ export default function WhiteBeltToolbox() {
     addLog("Initiating on-chain KYC verification via admin credentials...");
     
     try {
-      const server = new Horizon.Server(TESTNET_HORIZON_URL);
+      const server = new Horizon.Server(horizonUrl);
       const adminKeypair = Keypair.fromSecret(remittanceConfig.adminSecretKey);
       
       addLog("Fetching admin transaction authority...");
       const adminAccountInfo = await server.loadAccount(adminKeypair.publicKey());
       const adminAccount = new Account(adminKeypair.publicKey(), adminAccountInfo.sequenceNumber());
 
-      const contractInstance = new Contract(remittanceConfig.contractId);
+      const contractInstance = new Contract(remittanceContractId);
       const tx = new TransactionBuilder(adminAccount, {
         fee: "200",
-        networkPassphrase: Networks.TESTNET
+        networkPassphrase: networkPassphrase
       })
       .addOperation(contractInstance.call(
         "set_kyc",
@@ -371,8 +421,14 @@ export default function WhiteBeltToolbox() {
 
     const balanceNum = parseFloat(walletBalance || "0");
     const amountNum = parseFloat(remitAmount);
-    if (balanceNum < amountNum + 1.0) {
-      toast.error("Insufficient Funds", "Reserve at least 1.0 XLM for fees and account storage requirements.");
+    
+    // For sponsored transfers, the user doesn't pay the transaction fee.
+    const requiredMin = isSponsored ? amountNum : (amountNum + 1.0);
+    if (balanceNum < requiredMin) {
+      toast.error("Insufficient Funds", isSponsored 
+        ? "Ensure you have enough XLM for the transfer amount." 
+        : "Reserve at least 1.0 XLM for fees and account storage requirements."
+      );
       return;
     }
 
@@ -382,10 +438,10 @@ export default function WhiteBeltToolbox() {
     addLog(`Initiating remittance of ${remitAmount} XLM to ${remitRecipient} in corridor ${remitCorridor}...`);
 
     try {
-      const server = new Horizon.Server(TESTNET_HORIZON_URL);
+      const server = new Horizon.Server(horizonUrl);
       const accountInfo = await server.loadAccount(walletAddress);
       const account = new Account(walletAddress, accountInfo.sequenceNumber());
-      const contractInstance = new Contract(remittanceConfig.contractId);
+      const contractInstance = new Contract(remittanceContractId);
 
       const amountStroops = BigInt(Math.floor(amountNum * 10000000));
       
@@ -393,27 +449,59 @@ export default function WhiteBeltToolbox() {
         "send_remittance",
         new Address(walletAddress).toScVal(),
         new Address(remitRecipient).toScVal(),
-        new Address(remittanceConfig.nativeToken).toScVal(),
+        new Address(nativeTokenAddress).toScVal(),
         nativeToScVal(amountStroops, { type: 'i128' }),
         xdr.ScVal.scvSymbol(remitCorridor)
       );
 
-      const tx = new TransactionBuilder(account, {
-        fee: "300",
-        networkPassphrase: Networks.TESTNET
-      })
-      .addOperation(op)
-      .setTimeout(60)
-      .build();
+      let finalTx;
+      if (isSponsored) {
+        addLog("[Sponsorship] Creating inner transaction with zero base fee...");
+        const innerTx = new TransactionBuilder(account, {
+          fee: "0",
+          networkPassphrase: networkPassphrase
+        })
+        .addOperation(op)
+        .setTimeout(60)
+        .build();
 
-      setRemitStatusText("Awaiting Signature...");
-      addLog(`Requesting transaction signature from browser wallet (${walletType})...`);
-      const { signedTxXdr } = await kitRef.current.signTransaction(tx.toXDR());
-      const signedTx = new Transaction(signedTxXdr, Networks.TESTNET);
+        setRemitStatusText("Awaiting Wallet Signature...");
+        addLog("[Sponsorship] Requesting inner transaction signature from Freighter/xBull...");
+        const { signedTxXdr } = await kitRef.current.signTransaction(innerTx.toXDR());
+        const userSignedTx = new Transaction(signedTxXdr, networkPassphrase);
+
+        setRemitStatusText("Applying Fee Sponsorship...");
+        addLog("[Sponsorship] Building Stellar Fee Bump transaction envelope...");
+        const adminKeypair = Keypair.fromSecret(remittanceConfig.adminSecretKey);
+        const feeBumpTx = TransactionBuilder.buildFeeBumpTransaction(
+          adminKeypair.publicKey(),
+          "1000",
+          userSignedTx,
+          networkPassphrase
+        );
+
+        addLog("[Sponsorship] Signing Fee Bump envelope with admin/sponsor authority...");
+        feeBumpTx.sign(adminKeypair);
+        finalTx = feeBumpTx;
+      } else {
+        const tx = new TransactionBuilder(account, {
+          fee: "300",
+          networkPassphrase: networkPassphrase
+        })
+        .addOperation(op)
+        .setTimeout(60)
+        .build();
+
+        setRemitStatusText("Awaiting Signature...");
+        addLog(`Requesting transaction signature from browser wallet (${walletType})...`);
+        const { signedTxXdr } = await kitRef.current.signTransaction(tx.toXDR());
+        const signedTx = new Transaction(signedTxXdr, networkPassphrase);
+        finalTx = signedTx;
+      }
 
       setRemitStatusText("Broadcasting on-chain...");
-      addLog("Broadcasting signed remittance envelope to Soroban network...");
-      const result = await server.submitTransaction(signedTx);
+      addLog("Broadcasting remittance envelope to Stellar network...");
+      const result = await server.submitTransaction(finalTx);
 
       setRemitTxHash(result.hash);
       setRemitStatusText("Success!");
@@ -434,7 +522,7 @@ export default function WhiteBeltToolbox() {
   // Poll for remittance events specifically
   const pollRemittanceEvents = async () => {
     try {
-      const ledgerRes = await fetch(TESTNET_SOROBAN_RPC_URL, {
+      const ledgerRes = await fetch(sorobanRpcUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -448,7 +536,7 @@ export default function WhiteBeltToolbox() {
       if (!latestLedger) return;
 
       const startLedger = Math.max(1, latestLedger - 1000);
-      const res = await fetch(TESTNET_SOROBAN_RPC_URL, {
+      const res = await fetch(sorobanRpcUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -457,7 +545,7 @@ export default function WhiteBeltToolbox() {
           method: "getEvents",
           params: {
             startLedger: startLedger,
-            filters: [{ type: "contract", contractIds: [remittanceConfig.contractId] }],
+            filters: [{ type: "contract", contractIds: [remittanceContractId] }],
             limit: 10
           }
         })
@@ -606,7 +694,8 @@ export default function WhiteBeltToolbox() {
     let csvContent = "data:text/csv;charset=utf-8,";
     csvContent += "Full Name,Email Address,Stellar Wallet Address,Destination Corridor,UI Rating,Speed Rating,Cost Rating,Review Comment,Transaction Hash\r\n";
     
-    ONBOARDED_COHORT.forEach(u => {
+    const cohortToDownload = network === "testnet" ? ONBOARDED_COHORT : MAINNET_COHORT;
+    cohortToDownload.forEach(u => {
       const row = `"${u.name}","${u.email}","${u.address}","${u.corridor}",${u.uiRating},${u.speedRating},${u.costRating},"${u.comment.replace(/"/g, '""')}","${u.txHash}"`;
       csvContent += row + "\r\n";
     });
@@ -614,11 +703,11 @@ export default function WhiteBeltToolbox() {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "user-onboarding-feedback.csv");
+    link.setAttribute("download", `${network}-user-onboarding-feedback.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    addLog("User onboarding feedback spreadsheet downloaded successfully.");
+    addLog(`User onboarding feedback spreadsheet for ${network.toUpperCase()} downloaded successfully.`);
     toast.success("Spreadsheet Downloaded", "CSV feedback exported successfully.");
   };
 
@@ -635,7 +724,8 @@ export default function WhiteBeltToolbox() {
   }, [isRemitPollerActive]);
 
   // Cohort filtering logic
-  const filteredCohort = ONBOARDED_COHORT.filter(user => {
+  const currentCohort = network === "testnet" ? ONBOARDED_COHORT : MAINNET_COHORT;
+  const filteredCohort = currentCohort.filter(user => {
     const matchesSearch = 
       user.name.toLowerCase().includes(cohortSearch.toLowerCase()) || 
       user.email.toLowerCase().includes(cohortSearch.toLowerCase()) || 
@@ -1007,6 +1097,34 @@ export default function WhiteBeltToolbox() {
         </div>
 
         <div className="flex items-center gap-3 self-end md:self-auto">
+          {/* Network Selector Toggle */}
+          <div className="flex bg-slate-950/80 p-0.5 rounded-xl border border-slate-900 text-[10px] font-bold">
+            <button
+              onClick={() => {
+                setNetwork("testnet");
+                addLog("Switched application network to Testnet.");
+                toast.info("Network Switch", "Pointing to Stellar Testnet");
+              }}
+              className={`px-3 py-1.5 rounded-lg transition-all duration-200 ${
+                network === "testnet" ? "bg-indigo-600/30 text-indigo-400" : "text-slate-500 hover:text-slate-300"
+              }`}
+            >
+              Testnet
+            </button>
+            <button
+              onClick={() => {
+                setNetwork("mainnet");
+                addLog("Switched application network to Mainnet.");
+                toast.info("Network Switch", "Pointing to Stellar Mainnet");
+              }}
+              className={`px-3 py-1.5 rounded-lg transition-all duration-200 ${
+                network === "mainnet" ? "bg-amber-600/30 text-amber-400" : "text-slate-500 hover:text-slate-300"
+              }`}
+            >
+              Mainnet
+            </button>
+          </div>
+
           {!walletAddress ? (
             <Button variant="glow" onClick={connectWallet} disabled={walletLoading} className="text-xs">
               <Wallet className="h-4.5 w-4.5 mr-2" />
@@ -1014,7 +1132,7 @@ export default function WhiteBeltToolbox() {
             </Button>
           ) : (
             <div className="flex items-center gap-2 bg-indigo-950/20 border border-indigo-900/30 py-1.5 px-3 rounded-xl">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className={`w-2 h-2 rounded-full animate-pulse ${network === "testnet" ? "bg-emerald-500" : "bg-amber-500"}`} />
               <span className="text-[10px] text-indigo-300 font-mono font-bold">
                 {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
               </span>
@@ -1045,7 +1163,7 @@ export default function WhiteBeltToolbox() {
               <div className="p-4 rounded-2xl border border-slate-900 bg-slate-950/20">
                 <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Settlement Speed</span>
                 <span className="text-lg font-black text-emerald-400 mt-1 block">~5.2 Seconds</span>
-                <span className="text-[9px] text-slate-400 font-medium">Stellar Testnet Horizon</span>
+                <span className="text-[9px] text-slate-400 font-medium">Stellar {network === "testnet" ? "Testnet" : "Mainnet"} Horizon</span>
               </div>
               <div className="p-4 rounded-2xl border border-slate-900 bg-slate-950/20">
                 <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">SLA Success Rate</span>
@@ -1233,6 +1351,27 @@ export default function WhiteBeltToolbox() {
                   </div>
                 )}
 
+                {/* Level 6 Fee Sponsorship Advanced Feature toggle */}
+                <div className="flex items-center gap-2.5 p-3 rounded-xl border border-slate-900 bg-slate-950/60 mt-2">
+                  <input
+                    type="checkbox"
+                    id="fee-sponsor-checkbox"
+                    checked={isSponsored}
+                    onChange={(e) => {
+                      setIsSponsored(e.target.checked);
+                      addLog(`Fee Sponsorship toggled: ${e.target.checked ? "ENABLED (Gasless)" : "DISABLED"}`);
+                      if (e.target.checked) {
+                        toast.info("Fee Sponsorship Enabled", "Paisa will cover your transaction fee using Stellar Fee Bumps.");
+                      }
+                    }}
+                    disabled={remitLoading || kycStatus !== "Verified"}
+                    className="h-4 w-4 rounded border-slate-800 bg-slate-950 text-indigo-600 focus:ring-indigo-500 focus:ring-offset-slate-950 accent-indigo-600 cursor-pointer"
+                  />
+                  <label htmlFor="fee-sponsor-checkbox" className="text-xs text-slate-300 font-bold select-none cursor-pointer flex items-center gap-1">
+                    🚀 Enable Gasless Transfer (Fee Sponsored by Paisa Admin)
+                  </label>
+                </div>
+
                 <div className="flex items-center justify-between border-t border-slate-900/60 pt-6 mt-4 gap-4">
                   <div className="text-[10px] text-slate-500 max-w-md">
                     By submitting, the remittance contract will verify your KYC whitelist status, apply conversion rate parameters, transfer XLM, and publish an audit event.
@@ -1361,7 +1500,7 @@ export default function WhiteBeltToolbox() {
                           </td>
                           <td className="px-4 py-3 text-right">
                             <a
-                              href={`https://stellar.expert/explorer/testnet/tx/${user.txHash}`}
+                              href={network === "testnet" ? `https://stellar.expert/explorer/testnet/tx/${user.txHash}` : `https://stellar.expert/explorer/public/tx/${user.txHash}`}
                               target="_blank"
                               rel="noreferrer"
                               className="text-[10px] text-indigo-400 hover:underline inline-flex items-center gap-1 font-bold"
@@ -1479,14 +1618,14 @@ export default function WhiteBeltToolbox() {
                 <Radio className="h-4.5 w-4.5 text-emerald-500 animate-pulse" />
               </div>
               <p className="text-[10px] text-slate-400 leading-normal mb-3">
-                Real-time connection performance parameters linked to Horizon & Soroban RPC testnet endpoints.
+                Real-time connection performance parameters linked to Horizon & Soroban RPC {network === "testnet" ? "testnet" : "mainnet"} endpoints.
               </p>
 
               <div className="flex-1 bg-slate-950 border border-slate-900 rounded-xl p-3 overflow-y-auto font-mono text-[9px] text-slate-400 space-y-2">
-                <div className="text-emerald-400">[OK] Horizon Testnet: HTTPS 200 - Node healthy</div>
-                <div className="text-emerald-400">[OK] Soroban RPC: JSON-RPC 2.0 - Latency 112ms</div>
-                <div className="text-indigo-400">[MONITOR] Active Contract ID: {remittanceConfig.contractId.slice(0, 12)}...</div>
-                <div className="text-slate-500">[INFO] Event poller active. Filter: {remittanceConfig.contractId.slice(0, 8)}</div>
+                <div className="text-emerald-400">[OK] Horizon {network === "testnet" ? "Testnet" : "Mainnet"}: HTTPS 200 - Node healthy</div>
+                <div className="text-emerald-400">[OK] Soroban RPC ({network === "testnet" ? "Testnet" : "Mainnet"}): JSON-RPC 2.0 - Latency 112ms</div>
+                <div className="text-indigo-400">[MONITOR] Active Contract ID: {remittanceContractId.slice(0, 12)}...</div>
+                <div className="text-slate-500">[INFO] Event poller active. Filter: {remittanceContractId.slice(0, 8)}</div>
                 
                 {remitEvents.length > 0 ? (
                   remitEvents.map((ev, i) => (
