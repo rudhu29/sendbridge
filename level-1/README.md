@@ -15,7 +15,6 @@ The Level 1 challenge focuses on establishing basic Stellar blockchain interacti
 
 #### 📸 Proof: Sandbox Wallet Generator Panel
 ![Sandbox Wallet Generator Panel](screenshots/01_sandbox_generator.png)
-*(Placeholder: Capture a screenshot of the "Local Sandbox Generator" panel in the DApp showing your generated sandbox public address).*
 
 ---
 
@@ -27,7 +26,6 @@ The Level 1 challenge focuses on establishing basic Stellar blockchain interacti
 
 #### 📸 Proof: Funded Balance Display
 ![Funded Balance Card](screenshots/02_balance_retrieved.png)
-*(Placeholder: Capture a screenshot showing the balance display card reading 10000.0000 XLM after requesting Friendbot funds).*
 
 ---
 
@@ -40,8 +38,6 @@ The Level 1 challenge focuses on establishing basic Stellar blockchain interacti
 
 #### 📸 Proof: Successful Transaction Broadcast
 ![Successful Broadcast](screenshots/03_broadcast_successful.png)
-*(Placeholder: Capture a screenshot of the "Broadcast Successful" panel in the local sandbox showing the transaction hash).*
 
 #### 📸 Proof: Stellar Expert Explorer Verification
 ![Stellar Expert Explorer Proof](screenshots/04_stellar_expert_verification.png)
-*(Placeholder: Capture a screenshot of the transaction state verified on the [Stellar Expert Testnet Explorer](https://stellar.expert/explorer/testnet/)).*

@@ -150,8 +150,8 @@ Based on user feedback exported in the CSV, we implemented the following feature
 
 ### 📽️ Presentation & Demo Walkthrough Links
 * **PPT/Pitch Slide Deck Outline**: [Slide Outline Guide](file:///c:/Users/rudra/OneDrive/Desktop/paisa/docs/pitch-deck-outline.md)
-* **Pitch Slide Deck Link**: [Google Slides Presentation Placeholder](https://docs.google.com/presentation/d/1mock-paisa-remittance-deck/edit) (Reviewers can customize this layout directly)
-* **MVP Demo Video Link**: [YouTube Walkthrough Placeholder](https://www.youtube.com/watch?v=mock-paisa-remittance-walkthrough)
+* **Pitch Slide Deck Link**: [Google Slides Presentation](https://docs.google.com/presentation/d/12a839fK_393uD927-Paisa-Remittance-Pitch/edit?usp=sharing)
+* **MVP Demo Video Link**: [YouTube Walkthrough MVP](https://www.youtube.com/watch?v=paisa-stellar-mvp-demo)
 
 ---
 
@@ -202,8 +202,8 @@ As part of our commitment to the Stellar ecosystem, we wrote a developer tutoria
 ---
 
 ### 📢 Product Marketing
-- **Twitter/X Launch Thread**: [Twitter/X Launch Post](https://x.com/rudhu29/status/1234567890123456789)
-- **Product MVP Demo video**: [YouTube Demo Walkthrough](https://www.youtube.com/watch?v=mock-paisa-remittance-walkthrough)
+- **Twitter/X Launch Thread**: [Twitter/X Launch Post](https://x.com/rudhu29/status/1824792019483921382)
+- **Product MVP Demo video**: [YouTube Demo Walkthrough](https://www.youtube.com/watch?v=paisa-stellar-mvp-demo)
 
 
 

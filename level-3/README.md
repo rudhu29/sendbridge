@@ -1,6 +1,6 @@
-# 🟣 Level 3: Purple Belt Requirements & Verification
+# 🍊 Level 3: Orange Belt Requirements & Verification
 
-This directory contains the documentation and proof of completion for the **Level 3 (Purple Belt)** Stellar Journey to Mastery challenge.
+This directory contains the documentation and proof of completion for the **Level 3 (Orange Belt)** Stellar Journey to Mastery challenge.
 
 ---
 
@@ -22,7 +22,6 @@ The Level 3 challenge focuses on building a professional CI/CD pipeline, impleme
 
 #### 📸 Proof: Cargo Test Execution Output
 ![Cargo Test Output Console](screenshots/01_cargo_test_success.png)
-*(Placeholder: Capture a screenshot of your terminal showing successful `cargo test` execution for all smart contracts).*
 
 ---
 
@@ -32,7 +31,6 @@ The Level 3 challenge focuses on building a professional CI/CD pipeline, impleme
 
 #### 📸 Proof: Vitest Frontend Test Success
 ![Vitest Run Results](screenshots/02_vitest_results.png)
-*(Placeholder: Capture a screenshot showing the passing component assertions when running `npx vitest run` in the frontend console).*
 
 ---
 
@@ -44,4 +42,3 @@ The Level 3 challenge focuses on building a professional CI/CD pipeline, impleme
 
 #### 📸 Proof: Passing GitHub Actions Run
 ![GitHub Actions Run Successful](screenshots/03_github_actions_green.png)
-*(Placeholder: Capture a screenshot of the GitHub Actions page showing a successful green pipeline execution for verification).*

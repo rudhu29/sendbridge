@@ -15,7 +15,6 @@ The Level 4 challenge demands transitioning from a playground sandbox into a pro
 
 #### 📸 Proof: Remittance Portal Interface
 ![Paisa Remittance Dashboard](screenshots/01_paisa_remittance_dashboard.png)
-*(Placeholder: Capture a screenshot of the main Paisa Remittance Dashboard layout showing the active corridors and sending forms).*
 
 ---
 
@@ -25,7 +24,6 @@ The Level 4 challenge demands transitioning from a playground sandbox into a pro
 
 #### 📸 Proof: Admin KYC whitelist
 ![KYC Whitelist Configuration](screenshots/02_kyc_whitelist_console.png)
-*(Placeholder: Capture a screenshot showing the KYC Whitelist console loading, verifying, and whitelisting user wallet addresses).*
 
 ---
 
@@ -35,7 +33,6 @@ The Level 4 challenge demands transitioning from a playground sandbox into a pro
 
 #### 📸 Proof: Onboarded Users Cohort UI
 ![User Cohort UI Table](screenshots/03_user_cohort_table.png)
-*(Placeholder: Capture a screenshot of the dashboard component displaying the onboarded user cohort table list).*
 
 ---
 
@@ -49,4 +46,3 @@ The Level 4 challenge demands transitioning from a playground sandbox into a pro
 
 #### 📸 Proof: SLA Analytics & User Feedback Widgets
 ![SLA Console & Feedback](screenshots/04_sla_analytics_dashboard.png)
-*(Placeholder: Capture a screenshot showing the SLA Monitoring Console, Sentry logs, and submitted user feedback cards in the dashboard).*

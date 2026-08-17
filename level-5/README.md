@@ -15,7 +15,6 @@ The Level 5 challenge centers around scaling user onboarding, implementing custo
 
 #### 📸 Proof: Cohort Filter Datatable & Export CSV
 ![Paginated Cohort Search Table](screenshots/01_cohort_search_filter.png)
-*(Placeholder: Capture a screenshot showing the paginated cohort search table with filters applied and the "Download Cohort CSV" action button).*
 
 ---
 
@@ -25,7 +24,6 @@ The Level 5 challenge centers around scaling user onboarding, implementing custo
 
 #### 📸 Proof: Rate Alert Subscription & Warning Banner
 ![Exchange Rate Alert System](screenshots/02_rate_alert_triggered.png)
-*(Placeholder: Capture a screenshot of the Exchange Rate Alert Subscription widget and the flashing rate alert banner).*
 
 ---
 
@@ -35,7 +33,6 @@ The Level 5 challenge centers around scaling user onboarding, implementing custo
 
 #### 📸 Proof: USD Fee Optimizer Interface
 ![USD Payout Fee Savings Optimizer](screenshots/03_fee_savings_optimizer.png)
-*(Placeholder: Capture a screenshot showing the Soroban fee comparison calculator widget in the dashboard).*
 
 ---
 

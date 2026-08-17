@@ -23,7 +23,6 @@ The Level 6 challenge represents the highest level of mastery, deploying the con
 
 #### 📸 Proof: Sponsoring Transaction Fees (Gasless Mode)
 ![Enable Gasless Transfer Mode](screenshots/01_gasless_fee_sponsorship.png)
-*(Placeholder: Capture a screenshot of the remittance input form with the "Enable Gasless Transfer" toggle active).*
 
 ---
 
@@ -33,7 +32,6 @@ The Level 6 challenge represents the highest level of mastery, deploying the con
 
 #### 📸 Proof: Header Dual-Network Selector
 ![Dual-Network Toggle Header](screenshots/02_dual_network_switch.png)
-*(Placeholder: Capture a screenshot of the dynamic network switch header dropdown).*
 
 ---
 
@@ -44,4 +42,3 @@ The Level 6 challenge represents the highest level of mastery, deploying the con
 
 #### 📸 Proof: Twitter Launch Post Snapshot
 ![Twitter Launch Thread](screenshots/03_twitter_launch_thread.png)
-*(Placeholder: Capture a screenshot of your project launch post on Twitter/X).*

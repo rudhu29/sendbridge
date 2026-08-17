@@ -1,6 +1,6 @@
-# 🍊 Level 2: Orange Belt Requirements & Verification
+# 🟡 Level 2: Yellow Belt Requirements & Verification
 
-This directory contains the documentation and proof of completion for the **Level 2 (Orange Belt)** Stellar Journey to Mastery challenge.
+This directory contains the documentation and proof of completion for the **Level 2 (Yellow Belt)** Stellar Journey to Mastery challenge.
 
 ---
 
@@ -15,7 +15,6 @@ The Level 2 challenge integrates client-side browser wallet extensions, interact
 
 #### 📸 Proof: Wallet Connection Modal
 ![Wallet Connection Selector Modal](screenshots/01_multi_wallet_modal.png)
-*(Placeholder: Capture a screenshot of the multi-wallet selection modal showing the available wallet options when you click "Connect Wallet" on the dashboard).*
 
 ---
 
@@ -28,7 +27,6 @@ The Level 2 challenge integrates client-side browser wallet extensions, interact
 
 #### 📸 Proof: Fetching Soroban State
 ![Soroban State Read Panel](screenshots/02_contract_read_state.png)
-*(Placeholder: Capture a screenshot of the "Soroban Smart Contract" panel showing the counter value successfully fetched from the Testnet contract).*
 
 ---
 
@@ -41,7 +39,6 @@ The Level 2 challenge integrates client-side browser wallet extensions, interact
 
 #### 📸 Proof: Successful Smart Contract Transaction
 ![Successful Write Transaction](screenshots/03_contract_write_success.png)
-*(Placeholder: Capture a screenshot showing the status label in Success state along with the transaction hash confirming your contract call).*
 
 ---
 
@@ -51,4 +48,3 @@ The Level 2 challenge integrates client-side browser wallet extensions, interact
 
 #### 📸 Proof: Real-Time Event Log Console
 ![Real-Time Event Log](screenshots/04_event_listener_active.png)
-*(Placeholder: Capture a screenshot of the event logs panel showing the live ledger event records updating in real-time).*
