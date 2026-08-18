@@ -764,7 +764,7 @@ export default function WhiteBeltToolbox() {
       console.error(err);
       if (err.name === "NotFoundError") {
         addLog("Local sandbox account is not yet funded on Testnet.");
-        toast.warning("Not Funded", "Use Friendbot to activate this local address on-ledger.");
+        toast.info("Not Funded", "Use Friendbot to activate this local address on-ledger.");
       } else {
         addLog(`Sandbox balance check failed: ${err.message}`);
       }
