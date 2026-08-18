@@ -893,7 +893,7 @@ export default function WhiteBeltToolbox() {
         errorMsg.toLowerCase().includes("cancel")
       ) {
         addLog("Signature rejected: User declined the signing request in their wallet.");
-        toast.warning("Signature Refused", "Request rejected by the user.");
+        toast.info("Signature Refused", "Request rejected by the user.");
       } else {
         addLog(`Soroban call failed: ${errorMsg}`);
         toast.error("Invocation Failed", `The transaction could not be executed: ${errorMsg.slice(0, 80)}`);
