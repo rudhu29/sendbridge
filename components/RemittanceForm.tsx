@@ -1,7 +1,8 @@
 import React from "react";
-import { Send, TrendingUp, CheckSquare } from "lucide-react";
+import { Send, CheckSquare } from "lucide-react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import FeeOptimizer from "./FeeOptimizer";
 
 interface RemittanceFormProps {
   remitRecipient: string;
@@ -109,20 +110,7 @@ export default function RemittanceForm({
         </div>
 
         {/* Level 5 Gas Optimizer comparison widget */}
-        {remitAmount && (
-          <div className="p-3.5 rounded-xl border border-indigo-900/20 bg-indigo-950/5 flex items-center justify-between text-[10px]">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="h-4.5 w-4.5 text-indigo-400" />
-              <div>
-                <span className="text-slate-300 font-bold block">Paisa Fee Optimizer</span>
-                <span className="text-slate-500">Traditional Wire: $15.00 | Soroban: &lt;$0.0001 (0.0001 XLM)</span>
-              </div>
-            </div>
-            <span className="text-emerald-400 font-bold bg-emerald-950/20 px-2 py-0.5 rounded border border-emerald-900/20">
-              Saves 99.9%
-            </span>
-          </div>
-        )}
+        <FeeOptimizer remitAmount={remitAmount} isSponsored={isSponsored} />
 
         {/* Level 6 Fee Sponsorship Advanced Feature toggle */}
         <div className="flex items-center gap-2.5 p-3 rounded-xl border border-slate-900 bg-slate-950/60 mt-2">
