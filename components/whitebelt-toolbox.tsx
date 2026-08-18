@@ -711,7 +711,7 @@ export default function WhiteBeltToolbox() {
       const kp = Keypair.random();
       setLocalKeypair({
         publicKey: kp.publicKey(),
-        secretKey: kp.secretKey(),
+        secretKey: kp.secret(),
       });
       addLog(`New Sandbox Keypair generated. Address: ${kp.publicKey().slice(0, 10)}...`);
       toast.success("Sandbox Keypair Created", "A temporary keypair has been generated client-side.");
