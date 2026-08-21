@@ -84,6 +84,7 @@ export default function WhiteBeltToolbox() {
   // Cohort explorer state
   const [cohortSearch, setCohortSearch] = useState("");
   const [cohortFilter, setCohortFilter] = useState("All");
+  const [cohortMonthFilter, setCohortMonthFilter] = useState("All");
   const [cohortPage, setCohortPage] = useState(0);
   const usersPerPage = 5;
 
@@ -593,11 +594,11 @@ export default function WhiteBeltToolbox() {
   // Download cohort records as CSV
   const downloadCohortCsv = () => {
     let csvContent = "data:text/csv;charset=utf-8,";
-    csvContent += "Full Name,Email Address,Stellar Wallet Address,Destination Corridor,UI Rating,Speed Rating,Cost Rating,Review Comment,Transaction Hash\r\n";
+    csvContent += "Full Name,Email Address,Stellar Wallet Address,Destination Corridor,UI Rating,Speed Rating,Cost Rating,Review Comment,Transaction Hash,Date Onboarded\r\n";
     
     const cohortToDownload = network === "testnet" ? ONBOARDED_COHORT : MAINNET_COHORT;
     cohortToDownload.forEach(u => {
-      const row = `"${u.name}","${u.email}","${u.address}","${u.corridor}",${u.uiRating},${u.speedRating},${u.costRating},"${u.comment.replace(/"/g, '""')}","${u.txHash}"`;
+      const row = `"${u.name}","${u.email}","${u.address}","${u.corridor}",${u.uiRating},${u.speedRating},${u.costRating},"${u.comment.replace(/"/g, '""')}","${u.txHash}","${u.dateOnboarded}"`;
       csvContent += row + "\r\n";
     });
 
@@ -633,7 +634,8 @@ export default function WhiteBeltToolbox() {
       user.address.toLowerCase().includes(cohortSearch.toLowerCase());
     
     const matchesFilter = cohortFilter === "All" || user.corridor === cohortFilter;
-    return matchesSearch && matchesFilter;
+    const matchesMonth = cohortMonthFilter === "All" || user.dateOnboarded.includes(`-${cohortMonthFilter}-`);
+    return matchesSearch && matchesFilter && matchesMonth;
   });
 
   const totalCohortPages = Math.ceil(filteredCohort.length / usersPerPage);
@@ -1083,12 +1085,15 @@ export default function WhiteBeltToolbox() {
               setCohortSearch={setCohortSearch}
               cohortFilter={cohortFilter}
               setCohortFilter={setCohortFilter}
+              cohortMonthFilter={cohortMonthFilter}
+              setCohortMonthFilter={setCohortMonthFilter}
               cohortPage={cohortPage}
               setCohortPage={setCohortPage}
               filteredCohort={filteredCohort}
               displayedCohort={displayedCohort}
               totalCohortPages={totalCohortPages}
               network={network}
+              unfilteredCohort={currentCohort}
             />
           </div>
 
