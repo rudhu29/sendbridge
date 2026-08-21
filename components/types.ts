@@ -8,6 +8,7 @@ export interface OnboardedUser {
   costRating: number;
   comment: string;
   txHash: string;
+  dateOnboarded: string;
 }
 
 export interface UserFeedback {
