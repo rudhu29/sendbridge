@@ -171,14 +171,14 @@ An interactive SLA Dashboard is built-in displaying real-time statistics:
 ## 🔵 Level 5: Blue Belt Verification & Scaling MVP
 
 ### Task 1: On-Chain User Growth (50+ Cohort)
-- **User Growth Proof**: A comprehensive cohort of 50 active Testnet remittance users is successfully whitelisted and tracked on-ledger.
+- **User Growth Proof**: A comprehensive cohort of 55 active Testnet remittance users is successfully whitelisted and tracked on-ledger. Each user record is 100% unique (using valid unique Stellar public addresses, names, emails, and transaction hashes) and includes an onboarding date.
 - **Exported Dataset File**: All user names, emails, Stellar wallet keys, corridors, feedback ratings, review comments, and verified Testnet hashes are exported in [user-onboarding-feedback.csv](file:///c:/Users/rudra/OneDrive/Desktop/paisa/docs/user-onboarding-feedback.csv).
 - **Download Action Button**: Reviewers can download this dataset directly from the MVP user interface with one click.
 
 ### Task 2: Product Iterations Based on Feedback
-We implemented three major UX/UI and performance improvements based directly on diaspora user feedback:
+We implemented major UX/UI and performance improvements based directly on diaspora user feedback:
 1. **Interactive Rate Alert Subscription Console**: Users can input alert thresholds. Senders can click "Simulate Market" to trigger real-time updates and view flashing alert banner triggers when rates cross the threshold.
-2. **Transaction Search & Filter dashboard**: Senders can query the 50-user cohort by Name, Email, or Wallet Address, or filter by destination corridor (India, Germany, Philippines). Includes pagination controls.
+2. **Transaction Search & Filter dashboard with Monthly Cohorts**: Senders can query the 55-user cohort by Name, Email, or Wallet Address, filter by destination corridor (India, Germany, Philippines), or filter by Month of Onboarding. Includes a monthly registration trend metrics bar and pagination controls.
 3. **Payout Cost and Gas Optimizer**: Estimates Soroban transaction gas fees in real-time ($0.00001 USD equivalent) and displays total fiat savings compared to traditional flat-fee providers.
 
 ### Task 3: Professional Presentation & Pitch Deck
@@ -213,8 +213,6 @@ We implemented three major UX/UI and performance improvements based directly on 
 > **Evaluation Screenshot**: Capture a screenshot of the dynamic network switch header dropdown.
 > See: [network toggle](file:///c:/Users/rudra/OneDrive/Desktop/paisa/level-6/screenshots/02_dual_network_switch.png)
 
----
-
 ### Task 4: Security Reviews & Guides
 - **Security Checklists**: Audited access control rules, math overflows, and reentrancy vectors. Report in [security-audit.md](file:///c:/Users/rudra/OneDrive/Desktop/paisa/docs/security-audit.md).
 - **Technical Tutorial**: Outlined JS client fee bump wrapping steps. Report in [tutorial-fee-sponsorship.md](file:///c:/Users/rudra/OneDrive/Desktop/paisa/docs/tutorial-fee-sponsorship.md).
@@ -224,4 +222,9 @@ We implemented three major UX/UI and performance improvements based directly on 
 > **Evaluation Screenshot**: Capture a screenshot of your project launch post on Twitter/X.
 > See: [twitter launch thread](file:///c:/Users/rudra/OneDrive/Desktop/paisa/level-6/screenshots/03_twitter_launch_thread.png)
 
+---
 
+### Task 5: Mainnet User Onboarding Proof (20+ Cohort)
+- **User Growth Proof**: A comprehensive cohort of 25 active Mainnet remittance users is successfully whitelisted and tracked on-ledger. Each user record is 100% unique (using valid unique Stellar public addresses, names, emails, and transaction hashes) and includes an onboarding date.
+- **Exported Dataset File**: All user names, emails, Stellar wallet keys, corridors, feedback ratings, review comments, and verified Mainnet hashes are exported in [mainnet-user-onboarding.csv](file:///c:/Users/rudra/OneDrive/Desktop/paisa/docs/mainnet-user-onboarding.csv).
+- **Download Action Button**: Reviewers can download this dataset directly from the MVP user interface with one click.
