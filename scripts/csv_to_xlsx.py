@@ -24,25 +24,28 @@ def clean_csv_file(csv_path):
                 continue
             
             # Split the CSV line manually to handle unquoted commas in comments.
-            # A valid line has 9 fields: Name, Email, Address, Corridor, UI, Speed, Cost, Comment, TxHash.
+            # A valid line has 10 fields: Name, Email, Address, Corridor, UI, Speed, Cost, Comment, TxHash, DateOnboarded.
             # We split by comma up to the Cost field (first 7 fields).
             parts_left = line.split(',', 7)
             if len(parts_left) < 8:
                 continue
                 
-            # The last part contains "Comment,TxHash". We split from the right by the last comma to isolate TxHash.
+            # The last part contains "Comment,TxHash,DateOnboarded". We split from the right by the last two commas.
             right_part = parts_left[7]
-            parts_right = right_part.rsplit(',', 1)
-            if len(parts_right) < 2:
+            parts_right = right_part.rsplit(',', 2)
+            if len(parts_right) < 3:
                 continue
                 
             comment = parts_right[0]
             tx_hash = parts_right[1]
+            date_onboarded = parts_right[2]
             
             # Clean quotes if any
             comment = comment.strip('"')
+            tx_hash = tx_hash.strip('"')
+            date_onboarded = date_onboarded.strip('"')
             
-            row = parts_left[:7] + [comment, tx_hash]
+            row = parts_left[:7] + [comment, tx_hash, date_onboarded]
             cleaned_lines.append(row)
             
     return cleaned_lines
