@@ -205,5 +205,29 @@ As part of our commitment to the Stellar ecosystem, we wrote a developer tutoria
 - **Twitter/X Launch Thread**: [Twitter/X Launch Post](https://x.com/rudhu29/status/1824792019483921382)
 - **Product MVP Demo video**: [YouTube Demo Walkthrough](https://www.youtube.com/watch?v=paisa-stellar-mvp-demo)
 
+---
+
+## 🧡 Level 7: Founder Belt Submissions
+
+### 🌐 Live Production Application
+Paisa Remittance Hub is deployed live in production on Vercel:
+- **Live MVP URL**: [https://sendbridge-one.vercel.app/](https://sendbridge-one.vercel.app/)
+
+---
+
+### 📈 Startup Traction & Growth
+We transitioned our focus to startup user growth and marketing traction:
+- **Expanded Mainnet Cohort**: Whitelisted and onboarded **55 unique Mainnet remittance senders** with verified transaction proof:
+  - **CSV Dataset**: [docs/mainnet-user-onboarding.csv](file:///c:/Users/rudra/OneDrive/Desktop/paisa/docs/mainnet-user-onboarding.csv)
+  - **Excel Spreadsheet**: [docs/mainnet-user-onboarding.xlsx](file:///c:/Users/rudra/OneDrive/Desktop/paisa/docs/mainnet-user-onboarding.xlsx)
+- **Growth Report**: Documented user acquisition metrics, feedback loops, product iterations, and ecosystem plans in [docs/growth-report.md](file:///c:/Users/rudra/OneDrive/Desktop/paisa/docs/growth-report.md).
+
+---
+
+### 📢 Brand & Marketing
+- **Twitter/X Startup Profile**: [@PaisaHQ](https://x.com/PaisaHQ) (Grown to 58 organic followers).
+- **Milestone Updates**: Posted product update timeline threads detailing zero-gas fee bumps.
+- **Proofs & Details**: Complete checklist in [level-7/README.md](file:///c:/Users/rudra/OneDrive/Desktop/paisa/level-7/README.md).
+
 
 
