@@ -20,6 +20,7 @@ interface RemittanceFormProps {
   kycStatus: string;
   walletAddress: string;
   executeRemittance: (e: React.FormEvent) => void;
+  network?: "testnet" | "mainnet";
 }
 
 export default function RemittanceForm({
@@ -38,6 +39,7 @@ export default function RemittanceForm({
   kycStatus,
   walletAddress,
   executeRemittance,
+  network = "testnet",
 }: RemittanceFormProps) {
   return (
     <div className="rounded-2xl border border-slate-900 bg-slate-950/40 p-6 backdrop-blur-xl shadow-2xl">
@@ -156,7 +158,7 @@ export default function RemittanceForm({
           </code>
           <div className="flex items-center justify-between pt-1">
             <a
-              href={`https://stellar.expert/explorer/testnet/tx/${remitTxHash}`}
+              href={network === "mainnet" ? `https://stellar.expert/explorer/public/tx/${remitTxHash}` : `https://stellar.expert/explorer/testnet/tx/${remitTxHash}`}
               target="_blank"
               rel="noreferrer"
               className="text-[10px] text-indigo-400 hover:text-indigo-300 font-bold block"

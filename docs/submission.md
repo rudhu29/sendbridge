@@ -191,9 +191,9 @@ We implemented major UX/UI and performance improvements based directly on diaspo
 ## ⚫ Level 6: Black Belt Verification & Mainnet Deployment
 
 ### Task 1: Mainnet Smart Contract Addresses
-- **Remittance Contract Address**: `CCBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V3`
-- **Counter Contract Address**: `CBAV5UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V3`
-- **Vault Contract Address**: `CBA7Y7Q7SHZPDQ7O64J55W6WNKZSHP6P5X6FLT42V6757LCL4A24V3`
+- **Remittance Contract Address**: [`CCBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V3`](https://stellar.expert/explorer/public/contract/CCBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V3)
+- **Counter Contract Address**: [`CBAV5UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V3`](https://stellar.expert/explorer/public/contract/CBAV5UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V3)
+- **Vault Contract Address**: [`CBA7Y7Q7SHZPDQ7O64J55W6WNKZSHP6P5X6FLT42V6757LCL4A24V3`](https://stellar.expert/explorer/public/contract/CBA7Y7Q7SHZPDQ7O64J55W6WNKZSHP6P5X6FLT42V6757LCL4A24V3)
 
 ---
 

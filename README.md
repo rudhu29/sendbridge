@@ -159,9 +159,9 @@ Based on user feedback exported in the CSV, we implemented the following feature
 
 ### 🌐 Mainnet Deployment
 Our smart contracts have been compiled and deployed to the Stellar mainnet:
-- **Remittance Contract Address**: `CCBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V3`
-- **Counter Contract Address**: `CBAV5UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V3`
-- **Vault Contract Address**: `CBA7Y7Q7SHZPDQ7O64J55W6WNKZSHP6P5X6FLT42V6757LCL4A24V3`
+- **Remittance Contract Address**: [`CCBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V3`](https://stellar.expert/explorer/public/contract/CCBS7UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V3)
+- **Counter Contract Address**: [`CBAV5UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V3`](https://stellar.expert/explorer/public/contract/CBAV5UZEPNEGDCP6Q6I7A6L27WNKZSHP6P5X6FLT42V6757LCL4A24V3)
+- **Vault Contract Address**: [`CBA7Y7Q7SHZPDQ7O64J55W6WNKZSHP6P5X6FLT42V6757LCL4A24V3`](https://stellar.expert/explorer/public/contract/CBA7Y7Q7SHZPDQ7O64J55W6WNKZSHP6P5X6FLT42V6757LCL4A24V3)
 
 ---
 

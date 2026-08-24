@@ -1076,6 +1076,7 @@ export default function WhiteBeltToolbox() {
               kycStatus={kycStatus}
               walletAddress={walletAddress}
               executeRemittance={executeRemittance}
+              network={network}
             />
 
             {/* Cohorts Table component */}
