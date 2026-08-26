@@ -263,3 +263,11 @@ We implemented major UX/UI and performance improvements based directly on diaspo
 
 ### Task 4: Developer Community Contributions
 - **Soroban Fee Bump Guide**: Outlined JS transaction fee wrapping implementation in [tutorial-fee-sponsorship.md](file:///c:/Users/rudra/OneDrive/Desktop/paisa/docs/tutorial-fee-sponsorship.md).
+
+---
+
+### Task 5: Interactive Exchange Rate Trend Analytics Panel
+- **New Custom Feature**: Implemented a responsive SVG Area Spline Chart rendering 7-day historical volatility trends for INR, EUR, and PHP corridors. Includes glowing grid lines and interactive tooltip card states.
+- **Dynamic Walk Integration**: Integrates directly with the market fluctuation simulator, dynamically shifting coordinate values and chart paths in real-time.
+- **KPI Console Indicators**: Renders real-time statistics blocks computing moving averages, peak values, and optimal sending window scores (EXCELLENT / GOOD / MODERATE).
+

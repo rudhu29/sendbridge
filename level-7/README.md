@@ -45,3 +45,11 @@ The Level 7 challenge represents transition from shipping a product to building 
 - **Goal**: Give back and support other Soroban developer milestones.
 - **Ecosystem Tutorial**: Documented developer instructions explaining how to build and wrap fee-bumped transactions in JS. Report in [docs/tutorial-fee-sponsorship.md](file:///c:/Users/rudra/OneDrive/Desktop/paisa/docs/tutorial-fee-sponsorship.md).
 - **Twitter/X Launch Thread**: Outlined project launch details. Link at [Twitter/X Launch Post](https://x.com/rudhu29/status/1824792019483921382).
+
+---
+
+### 5. Interactive Exchange Rate Trends & Market Analytics
+- **New Feature**: Added an interactive SVG Area Spline Chart that renders 7-day historical volatility trends for INR, EUR, and PHP corridors.
+- **KPI Console**: Displays the current conversion rate, 7-day moving averages, 7-day peak high, and optimal sending window indicators (EXCELLENT, GOOD, MODERATE).
+- **Dynamic Walk Integration**: Integrates directly with the Rate Alert fluctuation engine.
+

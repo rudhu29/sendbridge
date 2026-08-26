@@ -36,6 +36,7 @@ import RateAlert from "./RateAlert";
 import CohortTable from "./CohortTable";
 import SlaAnalytics from "./SlaAnalytics";
 import FeedbackForm from "./FeedbackForm";
+import ExchangeRateTrends from "./ExchangeRateTrends";
 
 export default function WhiteBeltToolbox() {
   // Navigation State
@@ -1077,6 +1078,14 @@ export default function WhiteBeltToolbox() {
               walletAddress={walletAddress}
               executeRemittance={executeRemittance}
               network={network}
+            />
+
+            {/* Exchange Rate Trends component (Level 7 addition) */}
+            <ExchangeRateTrends
+              inrRate={inrRate}
+              eurRate={eurRate}
+              phpRate={phpRate}
+              corridor={remitCorridor}
             />
 
             {/* Cohorts Table component */}
